@@ -1,0 +1,33 @@
+
+{
+    "modules": [
+        {
+            "name":"User Management",
+            "active": true,
+            "roles":[
+                "edp-create-user",
+                "edp-reset-pwd",
+                "edp-delete-user",
+                "edp-change-roles"
+            ]
+        },
+        {
+            "name":"Attendance",
+            "active": true,
+            "roles":[
+                "attd-add",
+                "attd-update",
+                "attd-view"
+            ]
+        },
+        {
+            "name":"Accounts",
+            "active": true,
+            "roles":[
+                "fee-submition",
+                "fee-view",
+                "fee-add"
+            ]
+        }
+    ]
+}
