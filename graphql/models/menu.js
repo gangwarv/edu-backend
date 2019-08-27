@@ -3,31 +3,24 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
     text: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
-    module: {
+    role: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "Role"
+    },
+    path: {
+        type: String,
+        required: true
+    },
+    position: {
         type: String,
         required: true,
-        minlength: 3,
-        maxlength:12
+        default: 'left'
     },
-    userType: {
-        type: String,
-        required: true,
-        default: 'admin'
-    },
-    retryAttempts: Number,
-    blocked: Boolean,
-    createdAt: {
-        type: Date,
-        required: true,
-        default: new Date()
-    },
-    updatedAt: {
-        type: Date,
-        default: new Date()
-    }
+    sortOrder: String,
+    disabled: Boolean
 });
 
-module.exports = mongoose.model('User', schema);
+module.exports = mongoose.model('Menu', schema);

@@ -24,7 +24,8 @@ module.exports =
                         throw new Error(`Attempt ${user.retryAttempts} Incorrect username or password!`);
                     });
                 }
-                user.retryAttempts = 0;
+                user.retryAttempts = undefined;
+                user.blocked = undefined;
 
                 return user.save()
                     .then(() => {
@@ -60,5 +61,8 @@ module.exports =
                 throw new Error("Unauthenticated Request");
             }
             return ["Home", "Profile"]
+        },
+        addMenus: () => {
+
         }
     }
