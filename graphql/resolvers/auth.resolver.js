@@ -1,12 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/user')
-
-const user = {
-    userId: 99,
-    userName: 'vishal',
-    password: '123'
-};
+const User = require('../../models/app-management/user')
+const Student = require('../../models/app-management/menu')
 
 module.exports =
     {
@@ -57,12 +52,43 @@ module.exports =
                 })
         },
         menus: (args, req) => {
-            if (!req.isAuth) {
-                throw new Error("Unauthenticated Request");
-            }
-            return ["Home", "Profile"]
+            // if (!req.isAuth) {
+            //     throw new Error("Unauthenticated Request");
+            // }
+            return menus;
         },
-        addMenus: () => {
-
+        get: ()=>{
+            const student = new Student({
+                firstName: "Vis",
+                addresses: [
+                    { city: "5d6647a7336a97121ce90776", state: "5d6647a7336a97121ce90777", address1: "H-12" }
+                ]
+            });
+            return student.save()
+            .then(s=>s.firstName)
         }
     }
+
+const menus = [
+    {
+        "sortOrder": 0,
+        "module": "User Management",
+        "text": "Profile",
+        "path": "/profile",
+        "position": "top"
+    },
+    {
+        "sortOrder": 20,
+        "module": "Attendance",
+        "text": "Submit Attendance",
+        "path": "/attendance/take",
+        "position": "left"
+    },
+    {
+        "sortOrder": 30,
+        "module": "Attendance",
+        "text": "View Attendance",
+        "path": "/attendance/view",
+        "position": "left"
+    }
+];

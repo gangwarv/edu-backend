@@ -10,11 +10,21 @@ module.exports = {
         userName: String!
         password: String!
     }
+    type Menu {
+        sortOrder: String
+        module: String!
+        text: String!
+        path: String!
+        position: String!
+    }
+
     `,
     authQueries: `
     login(userName: String!, password: String!): AuthData!
     create(userName: String!, password: String!): User!
-    menus: [String!]!
+    menus: [Menu!]!
+
+    get: String
     `,
     authMutations: ''
 }
