@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../../models/app-management/user')
 const Student = require('../../models/app-management/menu')
