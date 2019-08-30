@@ -53,7 +53,8 @@ const schema = new mongoose.Schema({
             address2: String,
             landmark: String
         }
-    ]
-});
+    ],
+    
+},{timestamps: true});
 
 module.exports = mongoose.model('StudentNames', schema);
