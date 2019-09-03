@@ -10,20 +10,13 @@ const schema = new mongoose.Schema({
         required: true,
         default: "UG"
     },
-    activeForAdmission: Boolean,    
-    isActive: Boolean,    
+    activeForAdmission: Boolean,
+    isActive: Boolean,
+    departmentName: String,
     department: {
-        type: String,
-        required: true
-    },
-    courses: {
         type: mongoose.Types.ObjectId,
         ref: "AcademicDepartment"
-    },
-    department: {
-        type: String,
-        required: true
-    },
-});
+    }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Course', schema);

@@ -10,6 +10,6 @@ const schema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "Course"
     }],
-});
+},{timestamps: true});
 
 module.exports = mongoose.model('AcademicDepartment', schema);

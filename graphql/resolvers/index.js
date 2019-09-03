@@ -1,7 +1,11 @@
-const bookResolver = require('./book.resolver');
-const authResolver = require('./auth.resolver');
-
+const authResolver = require('./auth');
+const categoryResolver = require('./category');
+const academicDepartmentResolver = require('./academic-department');
+const courseResolver = require('./course');
+   
 module.exports = {
-    ...bookResolver,
-    ...authResolver
+    ...authResolver,
+    ...categoryResolver,
+    ...academicDepartmentResolver,
+    ...courseResolver
 }

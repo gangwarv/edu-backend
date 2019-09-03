@@ -51,9 +51,9 @@ module.exports =
                 })
         },
         menus: (args, req) => {
-            // if (!req.isAuth) {
-            //     throw new Error("Unauthenticated Request");
-            // }
+            if (!req.isAuth) {
+                throw new Error("Unauthorized!");
+            }
             return menus;
         },
         get: ()=>{

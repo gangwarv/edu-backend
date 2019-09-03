@@ -4,15 +4,6 @@ const Course = require('./models/shared/course');
 
 module.exports = function(){
 
-.then(dep =>{
-    return Course.insertMany([
-        {
-            name:'Btech in CS',
-            type:'UG'
-
-        }
-    ])
-})
 
 }
 
