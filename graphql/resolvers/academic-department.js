@@ -11,6 +11,7 @@ const addAcDept = ({ name }) => {
             return transformDocument(_);
         })
 }
+
 const toggleAcDept = async ({ _id }) => {
     try {
         const dept = await AcademicDepartment.findById(_id)
