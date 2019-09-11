@@ -8,10 +8,10 @@ module.exports = {
     }
     `,
     acDeptQueries: `
-        getAcademicDepartments(isActive: Boolean): [AcademicDepartment!]!
+    acDepts(isActive: Boolean): [AcademicDepartment!]!
     `,
     acDeptMutations: `
-        createAcademicDepartment(name: String!): AcademicDepartment!
-        toggleAcademicDepartment(_id: String!): AcademicDepartment!
+        addAcDept(name: String!): AcademicDepartment!
+        toggleAcDept(_id: String!): AcademicDepartment!
     `
 }
