@@ -33,7 +33,7 @@ toggleCourse = async ({ _id }) => {
     }
 }
 
-const courses = ({ isActive }) => {
+const courses = ({ isActive }, req) => {
     const filter = {};
     if (isActive !== undefined && isActive !== null) {
         filter['isActive'] = isActive

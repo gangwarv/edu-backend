@@ -7,6 +7,8 @@ var graphqlMiddleware = require('./graphql');
 var authMiddleware = require('./middleware/auth.middleware');
 
 var app = express();
+app.use(function(req,res,next){setTimeout(next,1000)});
+
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
@@ -21,6 +23,8 @@ app.use('/graphql', authMiddleware, graphqlMiddleware);
 app.get('/', function(req, res, next){
   res.render('index')
 });
+
+
 
 mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', { useNewUrlParser: true });
 

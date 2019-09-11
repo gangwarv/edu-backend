@@ -5,11 +5,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    module:{
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: "AppModule"
+    privileges: {
+        type: String,
+        required: true
     }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Role', schema);

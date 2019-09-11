@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
+    code: {
+        type: String,
+        required: true,
+        default:'NO_CODE'
+    },
     name: {
         type: String,
         required: true

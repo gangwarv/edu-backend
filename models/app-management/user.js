@@ -10,24 +10,19 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength:12
+        maxlength: 12
     },
     userType: {
         type: String,
         required: true,
         default: 'admin'
     },
-    retryAttempts: Number,
-    blocked: Boolean,
-    createdAt: {
-        type: Date,
-        required: true,
-        default: new Date()
+    privileges: {
+        type: String,
+        required: true
     },
-    updatedAt: {
-        type: Date,
-        default: new Date()
-    }
-});
+    retryAttempts: Number,
+    blocked: Boolean
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', schema);
