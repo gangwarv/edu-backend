@@ -53,10 +53,9 @@ const insertMany = async ({ depts }) => {
         throw err;
     }
 }
-module.exports =
-    {
-        addAcDept,
-        toggleAcDept,
-        acDepts,
-        updateAcDept
-    }
+module.exports = {
+    addAcDept,
+    toggleAcDept,
+    acDepts,
+    updateAcDept
+}
