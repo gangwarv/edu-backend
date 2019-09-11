@@ -5,7 +5,7 @@ module.exports = {
         userId: String!
         userName: String!
         expiresIn: Int!
-        privileges: String!
+        role: Role
     }
     type Role {
         _id: ID!
@@ -16,7 +16,7 @@ module.exports = {
         _id: ID!
         userName: String!
         password: String!
-        privileges: String!
+        role: Role!
     }
     type Menu {
         sortOrder: String
@@ -36,7 +36,7 @@ module.exports = {
     roles: [Role!]!
     `,
     authMutations: `
-    addUser(userName: String!, password: String!, privileges: String!): User!
+    addUser(userName: String!, password: String!, role: String!): User!
     addRole(name: String!, privileges: String!): Role!
     `
 }

@@ -17,9 +17,9 @@ const schema = new mongoose.Schema({
         required: true,
         default: 'admin'
     },
-    privileges: {
-        type: String,
-        required: true
+    role: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Role'
     },
     retryAttempts: Number,
     blocked: Boolean
