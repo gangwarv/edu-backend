@@ -10,12 +10,14 @@ module.exports = {
     type Role {
         _id: ID!
         name: String!
+        isActive: Boolean
         privileges: String!
     }
     type User {
         _id: ID!
         userName: String!
         password: String!
+        userType: String!
         role: Role!
     }
     type Menu {

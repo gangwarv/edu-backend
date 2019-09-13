@@ -26,6 +26,10 @@ app.get('/', function(req, res, next){
 
 
 
-mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', 
+{ 
+  useNewUrlParser: true,
+  useCreateIndex:true 
+});
 
 module.exports = app;

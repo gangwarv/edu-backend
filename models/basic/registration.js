@@ -1,68 +1,59 @@
 const mongoose = require('mongoose');
+const { mobile, address } = require('../shared/shared-schema');
 
 const schema = new mongoose.Schema({
-	session: {
+    session: {
         type: String,
         required: true
     },
     firstName: {
         type: String,
+        lowercase: true, 
+        trim: true,
         required: true
     },
-	lastName: {
+    lastName: {
+        type: String,
+        lowercase: true, 
+        trim: true,
+        required: true
+    },
+    gender: {
         type: String,
         required: true
     },
-	gender: {
-        type: String,
-        required: true
-    },
-	dateOfBirth: {
+    dateOfBirth: {
         type: Date
     },
-	mobile: {
+    mobile: mobile,
+    email: {
         type: String,
+        lowercase: true,
         required: true
     },
-	email: {
-        type: String,
-        required: true
-    },
-	course: {
+    course: {
         type: mongoose.Types.ObjectId,
         required: true,
-		ref: "Course"
+        ref: "Course"
     },
-	lateralEntry: {
+    lateralEntry: {
         type: Boolean
     },
-	category: {
+    category: {
         type: mongoose.Types.ObjectId,
         required: true
     },
-	addresses: [
-        {
-			type: {
-                type: String,
-                require: true
-            },
-            city: {
-                type: mongoose.Types.ObjectId,
-                required: true
-            },
-            state: {
-                type: mongoose.Types.ObjectId,
-                required: true
-            },
-            pin: String,
-            address1: {
-                type: String,
-                require: true
-            },
-            address2: String,
-            landmark: String
-        }
-    ]
+    // city: {
+    //     type: mongoose.Types.ObjectId,
+    //     required: true
+    // },
+    paddresses: address,
+    caddresses: address,
+    nationality: {
+        type: String,
+        required: true,
+        default: 'indian'
+    },
 });
 
 module.exports = mongoose.model('Registration', schema);

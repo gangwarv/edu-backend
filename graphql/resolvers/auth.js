@@ -60,7 +60,11 @@ const login = ({ userName, password }) => {
     })
 }
 
-const addUser = ({ userName, password, role }) => {
+const addUser = async ({ userName, password, role }) => {
+    const existingUser = await User.findOne({ userName }).exec();
+    if (existingUser) {
+        throw new Error('UserName already exists!')
+    }
     const user = new User({
         userName,
         password,
@@ -98,13 +102,7 @@ const addRole = ({ name, privileges }) => {
         name,
         privileges
     });
-    return role.save()
-        .then((data) => {
-            return data;
-        })
-        .catch((err) => {
-            throw err
-        })
+    return role.save();
 }
 
 const users = () => {
@@ -114,14 +112,13 @@ const roles = () => {
     return Role.find().exec();
 }
 
-module.exports =
-    {
-        login,
-        addUser,
-        menus,
-        roles,
-        addRole,
-        get,
-        users
-    }
+module.exports = {
+    login,
+    addUser,
+    menus,
+    roles,
+    addRole,
+    get,
+    users
+}
 
