@@ -41,9 +41,14 @@ const courses = ({ isActive }, req) => {
     return Course.find(filter);
 }
 
+const course = ({ _id }, req) => {
+    return Course.findById(_id);
+}
+
 module.exports =
     {
         addCourse,
         toggleCourse,
-        courses
+        courses,
+        course
     }

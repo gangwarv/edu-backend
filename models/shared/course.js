@@ -16,7 +16,14 @@ const schema = new mongoose.Schema({
         default: "UG"
     },
     activeForAdmission: Boolean,
-    isActive: Boolean,
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    isLateral: {
+        type: Boolean,
+        default: true
+    },
     departmentName: String,
     department: {
         type: mongoose.Types.ObjectId,

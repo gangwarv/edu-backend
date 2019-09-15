@@ -30,7 +30,6 @@ module.exports = {
 
     `,
     authQueries: `
-    login(userName: String!, password: String!): AuthData!
     menus: [Menu!]!
 
     get: String
@@ -38,6 +37,7 @@ module.exports = {
     roles: [Role!]!
     `,
     authMutations: `
+    login(userName: String!, password: String!): AuthData!
     addUser(userName: String!, password: String!, role: String!): User!
     addRole(name: String!, privileges: String!): Role!
     `
