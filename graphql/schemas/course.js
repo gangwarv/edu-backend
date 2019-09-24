@@ -9,13 +9,20 @@ module.exports = {
         isLateral: Boolean!
         departmentName: String!
         department: String!
+        activeForAdmission: Boolean
+        duration: String!
+        createdAt: String!
+        updatedAt: String!
     }
     input CourseInput {
+        _id: String
         code: String!
         type: String!
         name: String!
         department: String!
+        duration: String!
         isLateral: Boolean
+        isActive: Boolean
     }
     `,
     courseQueries: `

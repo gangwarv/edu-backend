@@ -10,24 +10,29 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    departmentName: String,
+    department: {
+        type: mongoose.Types.ObjectId,
+        ref: "AcademicDepartment"
+    },
     type: {
         type: String,
         required: true,
         default: "UG"
     },
-    activeForAdmission: Boolean,
     isActive: {
         type: Boolean,
         default: true
     },
+    activeForAdmission: Boolean,
     isLateral: {
         type: Boolean,
-        default: true
+        default: false
     },
-    departmentName: String,
-    department: {
-        type: mongoose.Types.ObjectId,
-        ref: "AcademicDepartment"
+    duration: {
+        type: String,
+        required: true,
+        default: '6-S' // or '6-s'
     }
 }, { timestamps: true });
 
