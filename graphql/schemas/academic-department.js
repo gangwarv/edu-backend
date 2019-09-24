@@ -11,6 +11,7 @@ module.exports = {
     acDepts(isActive: Boolean): [AcademicDepartment!]!
     `,
     acDeptMutations: `
+        updateAcDept(name: String!, _id: String!, isActive: Boolean): AcademicDepartment!
         addAcDept(name: String!): AcademicDepartment!
         toggleAcDept(_id: String!): AcademicDepartment!
     `

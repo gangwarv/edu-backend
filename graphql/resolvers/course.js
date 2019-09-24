@@ -29,8 +29,14 @@ addCourse = async ({ course }) => {
 toggleCourse = async ({ _id }) => {
     try {
         const course = await Course.findById(_id)
-        course.isActive = !course.isActive;
+        const dept = await AcademicDepartment.findById(course.department);
 
+        if (!course.isActive && !dept.isActive) {
+            throw new Error("Please activate department first before activating it's courses.")
+        }
+
+        course.isActive = !course.isActive;
+        
         return course.save()
             .then(d => transformDocument(d));
     }

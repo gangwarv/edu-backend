@@ -1,24 +1,30 @@
-const { transformDocument } = require('../../helpers/transform')
+const { transformDocument } = require('../../helpers/transform');
 const AcademicDepartment = require('../../models/shared/academicdepartment');
+const Course = require('../../models/shared/course');
 
 const addAcDept = ({ name }) => {
-    return AcademicDepartment.create({
-        name,
-        isActive: true,
-        courses: []
-    })
+    return AcademicDepartment
+        .create({
+            name,
+            isActive: true,
+            courses: []
+        })
         .then(_ => {
             return transformDocument(_);
-        })
+        });
 }
 
 const toggleAcDept = async ({ _id }) => {
     try {
-        const dept = await AcademicDepartment.findById(_id)
+        let dept = await AcademicDepartment.findById(_id);
         dept.isActive = !dept.isActive;
+        dept = await dept.save();
 
-        return dept.save()
-            .then(d => transformDocument(d));
+        const transformedDept = transformDocument(dept);
+        if (!transformedDept.isActive)
+            await Course.updateMany({ department: transformedDept._id }, { isActive: false });
+
+        return transformedDept;
     }
     catch (err) {
         throw err;
@@ -35,25 +41,29 @@ const acDepts = (args) => {
 }
 const updateAcDept = async ({ _id, name, isActive }) => {
     try {
-        const dept = await AcademicDepartment.findById(_id)
+        let dept = await AcademicDepartment.findById(_id)
         dept.name = name.trim();
         dept.isActive = isActive;
 
-        return dept.save()
-            .then(d => transformDocument(d));
+        dept = await dept.save();
+        const transformedDept = transformDocument(dept);
+
+        await Course.updateMany({ department: transformedDept._id }, { departmentName: transformedDept.name });
+
+        return transformedDept;
     }
     catch (err) {
         throw err;
     }
 }
-const insertMany = async ({ depts }) => {
-    try {
-        const dept = await AcademicDepartment.insertMany(depts);
-    }
-    catch (err) {
-        throw err;
-    }
-}
+// const insertMany = async ({ depts }) => {
+//     try {
+//         const dept = await AcademicDepartment.insertMany(depts);
+//     }
+//     catch (err) {
+//         throw err;
+//     }
+// }
 module.exports = {
     addAcDept,
     toggleAcDept,
