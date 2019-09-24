@@ -7,6 +7,8 @@ var graphqlMiddleware = require('./graphql');
 var authMiddleware = require('./middleware/auth.middleware');
 var delay = require('./middleware/delay');
 
+var Course = require('./models/shared/course');
+
 var app = express();
 app.use(function(req,res,next){setTimeout(next,1000)});
 
@@ -26,7 +28,10 @@ app.get('/', function(req, res, next){
   res.send('Express App')
 });
 
-
+app.get('/courses', function(req, res, next){
+  Course.find().exec()
+  .then(c=>res.send(c))
+});
 
 mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', 
 { 
