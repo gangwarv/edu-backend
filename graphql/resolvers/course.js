@@ -9,10 +9,10 @@ addCourse = async ({ course }) => {
         departmentName: dept._doc.name
     }
     var createdCourse = null;
-    if (newCourse._id) {
-        const id = newCourse._id;
-        delete newCourse._id;
-        createdCourse = await Course.findByIdAndUpdate(id, newCourse);
+
+    if (newCourse.id) {
+        const id = newCourse.id;
+        createdCourse = await Course.findByIdAndUpdate({ _id: id }, newCourse, { new: true });
     }
     else {
         createdCourse = await Course.create(newCourse);
@@ -36,7 +36,7 @@ toggleCourse = async ({ _id }) => {
         }
 
         course.isActive = !course.isActive;
-        
+
         return course.save()
             .then(d => transformDocument(d));
     }
@@ -55,8 +55,8 @@ const courses = ({ isActive }, req) => {
         .then(docs => docs.map(x => transformDocument(x)));
 }
 
-const course = ({ _id }, req) => {
-    return Course.findById(_id);
+const course = ({ id }, req) => {
+    return Course.findById(id);
 }
 
 module.exports =

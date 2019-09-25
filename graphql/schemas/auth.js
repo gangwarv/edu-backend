@@ -8,13 +8,13 @@ module.exports = {
         role: Role
     }
     type Role {
-        _id: ID!
+        id: ID!
         name: String!
         isActive: Boolean
         privileges: String!
     }
     type User {
-        _id: ID!
+        id: ID!
         userName: String!
         password: String!
         userType: String!

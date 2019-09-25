@@ -1,7 +1,7 @@
 module.exports = {
     acDeptTypes: `
     type AcademicDepartment {
-        _id: String
+        id: String
         name: String!
         isActive: Boolean!
         courses: [String!]!
@@ -11,8 +11,8 @@ module.exports = {
     acDepts(isActive: Boolean): [AcademicDepartment!]!
     `,
     acDeptMutations: `
-        updateAcDept(name: String!, _id: String!, isActive: Boolean): AcademicDepartment!
+        updateAcDept(id: String!, name: String!, isActive: Boolean): AcademicDepartment!
         addAcDept(name: String!): AcademicDepartment!
-        toggleAcDept(_id: String!): AcademicDepartment!
+        toggleAcDept(id: String!): AcademicDepartment!
     `
 }

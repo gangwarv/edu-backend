@@ -27,7 +27,8 @@ app.get('/', function(req, res, next){
 });
 
 
-
+//mongodb+srv://<username>:<password>@studentcluster-k7i07.mongodb.net/test?retryWrites=true&w=majority
+// mongoose.connect('mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority', 
 mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', 
 { 
   useNewUrlParser: true,

@@ -14,9 +14,10 @@ const addAcDept = ({ name }) => {
         });
 }
 
-const toggleAcDept = async ({ _id }) => {
+const toggleAcDept = async ({ id }, req) => {
+    req.roles.passed('add-course');
     try {
-        let dept = await AcademicDepartment.findById(_id);
+        let dept = await AcademicDepartment.findById(id);
         dept.isActive = !dept.isActive;
         dept = await dept.save();
 
@@ -39,9 +40,9 @@ const acDepts = (args) => {
     }
     return AcademicDepartment.find(filter);
 }
-const updateAcDept = async ({ _id, name, isActive }) => {
+const updateAcDept = async ({ id, name, isActive }) => {
     try {
-        let dept = await AcademicDepartment.findById(_id)
+        let dept = await AcademicDepartment.findById(id)
         dept.name = name.trim();
         dept.isActive = isActive;
 

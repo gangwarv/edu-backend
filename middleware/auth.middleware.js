@@ -35,7 +35,7 @@ Role.prototype.has = function(roleName) {
 }
 Role.prototype.passed = function(roleName) {
     const rolesFlat = this.roles.toString().toLowerCase();
-    if(rolesFlat === 'admin' || rolesFlat.indexOf(roleName.toLowerCase()) > -1){
+    if(!roleName || rolesFlat === 'admin' || rolesFlat.indexOf(roleName.toLowerCase()) > -1){
         return;
     }
     throw new Error("Access-denied");

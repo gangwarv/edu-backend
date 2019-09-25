@@ -1,7 +1,7 @@
 module.exports = {
     courseTypes: `
     type Course {
-        _id: ID!
+        id: ID!
         code: String!
         type: String!
         name: String!
@@ -15,7 +15,7 @@ module.exports = {
         updatedAt: String!
     }
     input CourseInput {
-        _id: String
+        id: String
         code: String!
         type: String!
         name: String!
@@ -27,7 +27,7 @@ module.exports = {
     `,
     courseQueries: `
     courses(isActive: Boolean): [Course!]!
-    course(_id: String!): Course!
+    course(id: String!): Course!
     `,
     courseMutations: `
     addCourse(course: CourseInput!): Course!
