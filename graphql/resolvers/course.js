@@ -26,9 +26,9 @@ addCourse = async ({ course }) => {
 
     return transformedCourse;
 }
-toggleCourse = async ({ _id }) => {
+toggleCourse = async ({ id }) => {
     try {
-        const course = await Course.findById(_id)
+        const course = await Course.findById(id)
         const dept = await AcademicDepartment.findById(course.department);
 
         if (!course.isActive && !dept.isActive) {
