@@ -26,7 +26,7 @@ module.exports = {
     }
     `,
     courseQueries: `
-    courses(isActive: Boolean): [Course!]!
+    courses(isActive: Boolean, department: String): [Course!]!
     course(id: String!): Course!
     `,
     courseMutations: `

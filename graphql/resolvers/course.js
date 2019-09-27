@@ -1,4 +1,3 @@
-const { transformDocument } = require('../../helpers/transform')
 const Course = require('../../models/shared/course');
 const AcademicDepartment = require('../../models/shared/academicdepartment');
 
@@ -18,13 +17,12 @@ addCourse = async ({ course }) => {
         createdCourse = await Course.create(newCourse);
     }
 
-    const transformedCourse = transformDocument(createdCourse);
-    if (dept.courses.indexOf(transformedCourse._id) === -1) {
-        dept.courses.push(transformedCourse._id);
+    if (dept.courses.indexOf(createdCourse.id) === -1) {
+        dept.courses.push(createdCourse.id);
         await dept.save();
     }
 
-    return transformedCourse;
+    return createdCourse;
 }
 toggleCourse = async ({ id }) => {
     try {
@@ -37,22 +35,23 @@ toggleCourse = async ({ id }) => {
 
         course.isActive = !course.isActive;
 
-        return course.save()
-            .then(d => transformDocument(d));
+        return course.save();
     }
     catch (err) {
         throw err;
     }
 }
 
-const courses = ({ isActive }, req) => {
+const courses = async ({ isActive, department }, req) => {
     const filter = {};
-    if (isActive !== undefined && isActive !== null) {
+    console.log('dept', department)
+    if (isActive !== undefined)
         filter['isActive'] = isActive
+    if (department) {
+        filter['department'] = department;
     }
-    return Course.find(filter)
-        .exec()
-        .then(docs => docs.map(x => transformDocument(x)));
+    console.log(filter)
+    return Course.find(filter);
 }
 
 const course = ({ id }, req) => {

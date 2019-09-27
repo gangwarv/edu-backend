@@ -1,17 +1,20 @@
-const { transformDocument } = require('../../helpers/transform');
 const AcademicDepartment = require('../../models/shared/academicdepartment');
 const Course = require('../../models/shared/course');
 
-const addAcDept = ({ name }) => {
-    return AcademicDepartment
-        .create({
+const addAcDept = async ({ dept: { id, name, isActive } }) => {
+    let newDept;
+    if (id)
+        newDept = await AcademicDepartment.findByIdAndUpdate(id, { name, isActive }, { new: true });
+    else
+        newDept = await AcademicDepartment.create({
             name,
             isActive: true,
             courses: []
-        })
-        .then(_ => {
-            return transformDocument(_);
         });
+
+    await Course.updateMany({ department: newDept.id }, { departmentName: newDept.name });
+
+    return newDept;
 }
 
 const toggleAcDept = async ({ id }, req) => {
@@ -21,11 +24,10 @@ const toggleAcDept = async ({ id }, req) => {
         dept.isActive = !dept.isActive;
         dept = await dept.save();
 
-        const transformedDept = transformDocument(dept);
-        if (!transformedDept.isActive)
-            await Course.updateMany({ department: transformedDept._id }, { isActive: false });
+        if (!dept.isActive)
+            await Course.updateMany({ department: dept.id }, { isActive: false });
 
-        return transformedDept;
+        return dept;
     }
     catch (err) {
         throw err;
@@ -40,23 +42,7 @@ const acDepts = (args) => {
     }
     return AcademicDepartment.find(filter);
 }
-const updateAcDept = async ({ id, name, isActive }) => {
-    try {
-        let dept = await AcademicDepartment.findById(id)
-        dept.name = name.trim();
-        dept.isActive = isActive;
 
-        dept = await dept.save();
-        const transformedDept = transformDocument(dept);
-
-        await Course.updateMany({ department: transformedDept._id }, { departmentName: transformedDept.name });
-
-        return transformedDept;
-    }
-    catch (err) {
-        throw err;
-    }
-}
 // const insertMany = async ({ depts }) => {
 //     try {
 //         const dept = await AcademicDepartment.insertMany(depts);
@@ -68,6 +54,5 @@ const updateAcDept = async ({ id, name, isActive }) => {
 module.exports = {
     addAcDept,
     toggleAcDept,
-    acDepts,
-    updateAcDept
+    acDepts
 }
