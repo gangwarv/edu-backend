@@ -1,5 +1,5 @@
 module.exports = function (req, res, next) {
-setTimeout(() => {
+    // setTimeout(() => {
     next()
-}, 1000);
+    // }, 1000);
 }
