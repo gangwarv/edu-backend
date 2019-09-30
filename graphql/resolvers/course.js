@@ -9,14 +9,12 @@ addCourse = async ({ course }) => {
     }
     var createdCourse = null;
 
-    if (newCourse.id) {
-        const id = newCourse.id;
+    const id = newCourse.id;
+    if (id) 
         createdCourse = await Course.findByIdAndUpdate({ _id: id }, newCourse, { new: true });
-    }
-    else {
+    else 
         createdCourse = await Course.create(newCourse);
-    }
-
+    
     if (dept.courses.indexOf(createdCourse.id) === -1) {
         dept.courses.push(createdCourse.id);
         await dept.save();
@@ -44,13 +42,13 @@ toggleCourse = async ({ id }) => {
 
 const courses = async ({ isActive, department }, req) => {
     const filter = {};
-    console.log('dept', department)
+    
     if (isActive !== undefined)
         filter['isActive'] = isActive
     if (department) {
         filter['department'] = department;
     }
-    console.log(filter)
+    
     return Course.find(filter);
 }
 
