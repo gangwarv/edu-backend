@@ -38,10 +38,14 @@ const deleteAcDept = async ({ id }, req) => {
 
     const courseCount = await Course.countDocuments({ department: id });
 
-    if(courseCount > 0){
+    if (courseCount > 0) {
         throw new Error("Kindly detach all its associated entities first.")
     }
-
+    const deptCount = await AcademicDepartment.countDocuments({ _id: id });
+    
+    if (deptCount === 0) {
+        throw new Error("Academic Department does not exists!")
+    }
     return AcademicDepartment.findByIdAndDelete(id);
 }
 

@@ -99,11 +99,12 @@ const menus = (args, req) => {
 //         .then(s => s.firstName)
 // }
 const addRole = async ({ id, name, privileges, isActive }) => {
+    privileges = privileges.split(',').sort().toString();
     let existingDoc = null;
     if (id)
         existingDoc = await Role.findByIdAndUpdate(id, { name, privileges, isActive }, { new: true });
     else
-        existingDoc = Role.create({
+        existingDoc = await Role.create({
             name,
             privileges,
             isActive: true
