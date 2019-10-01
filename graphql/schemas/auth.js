@@ -7,11 +7,17 @@ module.exports = {
         expiresIn: Int!
         role: Role
     }
+    type AppModule {
+        id: ID!
+        name: String!
+        privileges: String!
+        isActive: Boolean
+    }
     type Role {
         id: ID!
         name: String!
-        isActive: Boolean
         privileges: String!
+        isActive: Boolean
     }
     type User {
         id: ID!
@@ -32,13 +38,14 @@ module.exports = {
     authQueries: `
     menus: [Menu!]!
 
-    get: String
     users: [User!]!
     roles: [Role!]!
+    appmodules: [AppModule!]!
     `,
     authMutations: `
     login(userName: String!, password: String!): AuthData!
     addUser(userName: String!, password: String!, role: String!): User!
-    addRole(name: String!, privileges: String!): Role!
+    addRole(id: String, name: String!, privileges: String!, isActive: Boolean): Role!
+    deleteRole(id: String!): Role!
     `
 }

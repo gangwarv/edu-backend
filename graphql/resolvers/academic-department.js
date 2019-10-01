@@ -33,6 +33,17 @@ const toggleAcDept = async ({ id }, req) => {
         throw err;
     }
 }
+const deleteAcDept = async ({ id }, req) => {
+    req.roles.passed('add-course');
+
+    const courseCount = await Course.countDocuments({ department: id });
+
+    if(courseCount > 0){
+        throw new Error("Kindly detach all its associated entities first.")
+    }
+
+    return AcademicDepartment.findByIdAndDelete(id);
+}
 
 const acDepts = (args) => {
     const { isActive } = args;
@@ -52,7 +63,8 @@ const acDepts = (args) => {
 //     }
 // }
 module.exports = {
+    acDepts,
     addAcDept,
     toggleAcDept,
-    acDepts
+    deleteAcDept
 }

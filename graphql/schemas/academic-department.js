@@ -20,5 +20,6 @@ module.exports = {
     acDeptMutations: `
         addAcDept(dept: AcademicDepartmentInput): AcademicDepartment!
         toggleAcDept(id: String!): AcademicDepartment!
+        deleteAcDept(id: String!): AcademicDepartment!
     `
 }

@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const User = require('../../models/app-management/user')
 const Role = require('../../models/app-management/role')
-const Student = require('../../models/app-management/menu')
+const AppModule = require('../../models/app-management/appmodule')
+// const Student = require('../../models/app-management/menu')
 const menusData = [
     {
         "sortOrder": 0,
@@ -87,38 +88,59 @@ const menus = (args, req) => {
     return menusData;
 }
 
-const get = () => {
-    const student = new Student({
-        firstName: "Vis",
-        addresses: [
-            { city: "5d6647a7336a97121ce90776", state: "5d6647a7336a97121ce90777", address1: "H-12" }
-        ]
-    });
-    return student.save()
-        .then(s => s.firstName)
-}
-const addRole = ({ name, privileges }) => {
-    const role = new Role({
-        name,
-        privileges
-    });
-    return role.save();
+// const get = () => {
+//     const student = new Student({
+//         firstName: "Vis",
+//         addresses: [
+//             { city: "5d6647a7336a97121ce90776", state: "5d6647a7336a97121ce90777", address1: "H-12" }
+//         ]
+//     });
+//     return student.save()
+//         .then(s => s.firstName)
+// }
+const addRole = async ({ id, name, privileges, isActive }) => {
+    let existingDoc = null;
+    if (id)
+        existingDoc = await Role.findByIdAndUpdate(id, { name, privileges, isActive }, { new: true });
+    else
+        existingDoc = Role.create({
+            name,
+            privileges,
+            isActive: true
+        });
+    return existingDoc;
 }
 
 const users = () => {
     return User.find().populate('role').exec();
 }
 const roles = () => {
-    return Role.find().exec();
+    return Role.find();
 }
-
+const deleteRole = async ({ id }) => {
+    const roleCount  = await Role.countDocuments({ _id: id });
+    console.log(roleCount);
+    if(roleCount === 0){
+        throw new Error("Role does not exists!")
+    }
+    const count = await User.countDocuments({ role: id });
+    
+    if (count === 0) {
+        return Role.findByIdAndDelete(id);
+    }
+    throw new Error("Kindly detach all its associated entities first.")
+}
+const appmodules = () => {
+    return AppModule.find({ isActive: true });
+}
 module.exports = {
-    login,
-    addUser,
+    appmodules,
     menus,
     roles,
+    users,
+    login,
+    addUser,
     addRole,
-    get,
-    users
+    deleteRole
 }
 

@@ -6,11 +6,11 @@ const schema = new mongoose.Schema({
         required: true
     },
     sortOrder: String,
-    privileges: [{
-        type: String,
-        required: true
-    }],
-    isActive: Boolean
+    privileges: String,
+    isActive: {
+        type: Boolean,
+        require: true
+    }
 });
 
 module.exports = mongoose.model('AppModule', schema);
