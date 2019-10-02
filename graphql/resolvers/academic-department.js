@@ -42,7 +42,7 @@ const deleteAcDept = async ({ id }, req) => {
         throw new Error("Kindly detach all its associated entities first.")
     }
     const deptCount = await AcademicDepartment.countDocuments({ _id: id });
-    
+
     if (deptCount === 0) {
         throw new Error("Academic Department does not exists!")
     }
@@ -57,17 +57,13 @@ const acDepts = (args) => {
     }
     return AcademicDepartment.find(filter);
 }
+const acDept = ({ id }) => {
+    return AcademicDepartment.findById(id);
+}
 
-// const insertMany = async ({ depts }) => {
-//     try {
-//         const dept = await AcademicDepartment.insertMany(depts);
-//     }
-//     catch (err) {
-//         throw err;
-//     }
-// }
 module.exports = {
     acDepts,
+    acDept,
     addAcDept,
     toggleAcDept,
     deleteAcDept

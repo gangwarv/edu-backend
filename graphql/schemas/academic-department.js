@@ -16,6 +16,7 @@ module.exports = {
     `,
     acDeptQueries: `
     acDepts(isActive: Boolean): [AcademicDepartment!]!
+    acDept(id: String!): AcademicDepartment!
     `,
     acDeptMutations: `
         addAcDept(dept: AcademicDepartmentInput): AcademicDepartment!

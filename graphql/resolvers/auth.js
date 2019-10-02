@@ -3,6 +3,7 @@ const User = require('../../models/app-management/user')
 const Role = require('../../models/app-management/role')
 const AppModule = require('../../models/app-management/appmodule')
 // const Student = require('../../models/app-management/menu')
+const maxLoginAttempts = 5;
 const menusData = [
     {
         "sortOrder": 0,
@@ -32,13 +33,16 @@ const login = ({ userName, password }) => {
         if (!user)
             throw new Error('User does not exists!')
         if (user.blocked)
-            throw new Error('User is blocked!')
+            throw new Error('Your account has been blocked!')
         if (password !== user.password) {
             user.retryAttempts = (user.retryAttempts || 0) + 1;
-            user.blocked = user.retryAttempts > 2;
+            user.blocked = user.retryAttempts >= maxLoginAttempts;
 
             return user.save().then(_ => {
-                throw new Error(`Attempt ${user.retryAttempts} Incorrect username or password!`);
+                throw new Error(
+                    user.retryAttempts > 2 ?
+                        `Your account has been blocked.!`
+                        : `Attempt ${user.retryAttempts} Incorrect username or password!`);
             });
         }
         user.retryAttempts = undefined;
@@ -88,18 +92,9 @@ const menus = (args, req) => {
     return menusData;
 }
 
-// const get = () => {
-//     const student = new Student({
-//         firstName: "Vis",
-//         addresses: [
-//             { city: "5d6647a7336a97121ce90776", state: "5d6647a7336a97121ce90777", address1: "H-12" }
-//         ]
-//     });
-//     return student.save()
-//         .then(s => s.firstName)
-// }
 const addRole = async ({ id, name, privileges, isActive }) => {
     privileges = privileges.split(',').sort().toString();
+
     let existingDoc = null;
     if (id)
         existingDoc = await Role.findByIdAndUpdate(id, { name, privileges, isActive }, { new: true });
@@ -119,13 +114,13 @@ const roles = () => {
     return Role.find();
 }
 const deleteRole = async ({ id }) => {
-    const roleCount  = await Role.countDocuments({ _id: id });
-    console.log(roleCount);
-    if(roleCount === 0){
+    const roleCount = await Role.countDocuments({ _id: id });
+
+    if (roleCount === 0) {
         throw new Error("Role does not exists!")
     }
     const count = await User.countDocuments({ role: id });
-    
+
     if (count === 0) {
         return Role.findByIdAndDelete(id);
     }
