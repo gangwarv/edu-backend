@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const User = require('../../models/app-management/user')
 const Role = require('../../models/app-management/role')
 const AppModule = require('../../models/app-management/appmodule')
-// const Student = require('../../models/app-management/menu')
 const maxLoginAttempts = 5;
 const menusData = [
     {
@@ -27,6 +26,22 @@ const menusData = [
         "position": "left"
     }
 ];
+const menus = (args, req) => {
+    if (!req.isAuth) {
+        throw new Error("Unauthorized!");
+    }
+    return menusData;
+}
+
+function transformUser(userDoc){
+    return {
+        ...userDoc._doc,
+        id: userDoc.id,
+        role: userDoc.role.id,
+        roleName: userDoc.role.name,
+        privileges: userDoc.role.privileges
+    }
+}
 
 const login = ({ userName, password }) => {
     return User.findOne({ userName }).populate('role').exec().then(user => {
@@ -65,31 +80,25 @@ const login = ({ userName, password }) => {
     })
 }
 
-const addUser = async ({ userName, password, role }) => {
-    const existingUser = await User.findOne({ userName }).exec();
+const addUser = async ({ user }) => {
+    // ommit pwd if empty
+    if(!user.password){
+        delete user.password;
+    }
+    const existingUser = await User.findOne({ userName: user.userName }).exec();
     if (existingUser) {
-        throw new Error('UserName already exists!')
+        console.log(existingUser.id, user.id)
+        if (existingUser.id !== user.id) {
+            throw new Error('UserName already exists!')
+        }
+        // update
+        return Object.assign(existingUser, user).save();
     }
-    const user = new User({
-        userName,
-        password,
-        role
-    });
-    return user.save()
-        .then((data) => {
-            console.log('user saved', data);
-            return data;
-        })
-        .catch((err) => {
-            throw err
-        })
-}
-
-const menus = (args, req) => {
-    if (!req.isAuth) {
-        throw new Error("Unauthorized!");
+    if (user.id) {
+        return User.findByIdAndUpdate(user.id, user, { new: true });
     }
-    return menusData;
+    
+    return User.create(user);
 }
 
 const addRole = async ({ id, name, privileges, isActive }) => {
@@ -108,10 +117,10 @@ const addRole = async ({ id, name, privileges, isActive }) => {
 }
 
 const users = () => {
-    return User.find().populate('role').exec();
+    return User.find().populate('role').then(users=>users.map(u=>transformUser(u)));
 }
 const user = ({ id }) => {
-    return User.findById(id).populate('role').exec();
+    return User.findById(id).populate('role').map(u=>transformUser(u));
 }
 const roles = () => {
     return Role.find();

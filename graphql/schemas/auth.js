@@ -21,10 +21,33 @@ module.exports = {
     }
     type User {
         id: ID!
+        firstName: String!
+        lastName: String!
         userName: String!
-        password: String!
+        password: String
+        mobile: String!
         userType: String!
-        role: Role!
+        isActive: Boolean!
+
+        email: String
+        blocked: Boolean
+        retryAttempts: Int
+
+        role: String!
+        roleName: String!
+    }
+    input UserInput {
+        id: ID
+        firstName: String!
+        lastName: String!
+        userName: String!
+        password: String
+        mobile: String!
+        userType: String
+        email: String
+        userRef: String
+        isActive: Boolean
+        role: String!
     }
     type Menu {
         sortOrder: String
@@ -46,7 +69,9 @@ module.exports = {
     `,
     authMutations: `
     login(userName: String!, password: String!): AuthData!
-    addUser(userName: String!, password: String!, role: String!): User!
+
+    addUser(user: UserInput): User!
+
     addRole(id: String, name: String!, privileges: String!, isActive: Boolean): Role!
     deleteRole(id: String!): Role!
     `
