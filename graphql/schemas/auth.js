@@ -39,7 +39,9 @@ module.exports = {
     menus: [Menu!]!
 
     users: [User!]!
+    user(id:String!): User!
     roles: [Role!]!
+    role(id:String!): Role!
     appmodules: [AppModule!]!
     `,
     authMutations: `

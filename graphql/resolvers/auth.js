@@ -110,8 +110,14 @@ const addRole = async ({ id, name, privileges, isActive }) => {
 const users = () => {
     return User.find().populate('role').exec();
 }
+const user = ({ id }) => {
+    return User.findById(id).populate('role').exec();
+}
 const roles = () => {
     return Role.find();
+}
+const role = ({ id }) => {
+    return Role.findById(id);
 }
 const deleteRole = async ({ id }) => {
     const roleCount = await Role.countDocuments({ _id: id });
@@ -133,7 +139,9 @@ module.exports = {
     appmodules,
     menus,
     roles,
+    role,
     users,
+    user,
     login,
     addUser,
     addRole,
