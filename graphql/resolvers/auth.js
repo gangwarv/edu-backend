@@ -45,7 +45,7 @@ function transformUser(userDoc) {
 }
 
 const login = ({ userName, password }) => {
-    const expiresIn = 60;
+    const expiresIn = 600; // in seconds
     return User.findOne({ userName, isActive: true }).populate('role').then(user => {
         if (!user)
             throw new Error('User does not exists!')
@@ -64,7 +64,7 @@ const login = ({ userName, password }) => {
         return {
             ...data,
             token,
-            expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 60 * 1000).getTime()
+            expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
         };
     })
 }
