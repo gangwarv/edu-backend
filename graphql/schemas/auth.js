@@ -1,11 +1,12 @@
 module.exports = {
     authTypes: `
     type AuthData {
-        token: String
         userId: String!
         userName: String!
-        expiresIn: Int!
-        role: Role
+        token: String!
+        expiresIn: Float!
+        roleName: String!
+        privileges: String!
     }
     type AppModule {
         id: ID!
@@ -44,10 +45,10 @@ module.exports = {
         userName: String!
         password: String
         mobile: String!
-        userType: String
-        email: String
+        userType: String!
         userRef: String
-        isActive: Boolean
+        email: String
+        isActive: Boolean!
         role: String!
     }
     type Menu {

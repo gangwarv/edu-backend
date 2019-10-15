@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../../models/app-management/user')
 const Role = require('../../models/app-management/role')
 const AppModule = require('../../models/app-management/appmodule')
-const maxLoginAttempts = 5;
+const maxLoginAttempts = 50;
 const menusData = [
     {
         "sortOrder": 0,
@@ -44,41 +44,30 @@ function transformUser(userDoc) {
 }
 
 const login = ({ userName, password }) => {
-    return User.findOne({ userName }).populate('role').exec().then(user => {
+    const expiresIn = 600; // in seconds
+    return User.findOne({ userName, isActive: true }).populate('role').then(user => {
         if (!user)
             throw new Error('User does not exists!')
         if (user.blocked)
             throw new Error('Your account has been blocked!')
         if (password !== user.password) {
-            user.retryAttempts = (user.retryAttempts || 0) + 1;
-            user.blocked = user.retryAttempts >= maxLoginAttempts;
-
-            return user.save().then(_ => {
-                throw new Error(
-                    user.retryAttempts > 2 ?
-                        `Your account has been blocked.!`
-                        : `Attempt ${user.retryAttempts} Incorrect username or password!`);
-            });
+            throw new Error('Invalid credentials!')
         }
-        user.retryAttempts = undefined;
-        user.blocked = undefined;
-
-        return user.save()
-            .then(() => {
-                const data = {
-                    userId: user._id,
-                    userName: user.userName,
-                    role: user.role
-                }
-                const token = jwt.sign(data, 'secret', { expiresIn: 60 });
-                return {
-                    ...data,
-                    token,
-                    expiresIn: 60
-                };
-            });
+        const data = {
+            userId: user.id,
+            userName: user.userName,
+            roleName: user.role.name,
+            privileges: user.role.privileges
+        }
+        const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
+        return {
+            ...data,
+            token,
+            expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
+        };
     })
 }
+
 
 const addUser = async ({ user }) => {
     // ommit pwd if empty
@@ -86,22 +75,18 @@ const addUser = async ({ user }) => {
         delete user.password;
     }
     const count = await User.countDocuments({ userName: user.userName, _id: { $ne: user.id } });
-
     if (count > 0) {
-        throw new Error('UserName already exists!')
+        throw new Error('UserName already exists!');
     }
-    let usr = null;
+    let createdUser = null;
     if (user.id)
-        usr = await User.findByIdAndUpdate(user.id, user, { new: true });
+        createdUser = await User.findByIdAndUpdate(user.id, user, { new: true });
     else
-        usr = await User.create(user);
+        createdUser = await User.create(user);
 
-    usr = await Role.findById(usr.role).then(role => {
-        usr.role = role;
-        return usr;
-    });
+    createdUser.role = await Role.findById(user.role);
 
-    return transformUser(usr)
+    return transformUser(createdUser)
 }
 
 const addRole = async ({ id, name, privileges, isActive }) => {
