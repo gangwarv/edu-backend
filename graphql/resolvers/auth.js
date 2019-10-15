@@ -34,7 +34,6 @@ const menus = (args, req) => {
 }
 
 function transformUser(userDoc) {
-    console.log(userDoc)
     return {
         ...userDoc._doc,
         id: userDoc.id,

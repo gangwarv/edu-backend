@@ -14,10 +14,11 @@ module.exports = function (req, res, next) {
     }
 
     try {
-        const { userId, roles } = jwt.verify(token, 'secret');
+        const { userId, roles, ...rest } = jwt.verify(token, 'secret');
         req.userId = userId;
         req.isAuth = true;
         req.roles = new Role(roles);
+        console.log(userId,rest)
     }
     catch {
         req.isAuth = false;
