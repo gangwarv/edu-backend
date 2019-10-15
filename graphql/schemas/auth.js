@@ -35,6 +35,7 @@ module.exports = {
 
         role: String!
         roleName: String!
+        privileges: String!
     }
     input UserInput {
         id: ID

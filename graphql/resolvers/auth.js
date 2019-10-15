@@ -33,7 +33,7 @@ const menus = (args, req) => {
     return menusData;
 }
 
-function transformUser(userDoc){
+function transformUser(userDoc) {
     return {
         ...userDoc._doc,
         id: userDoc.id,
@@ -82,23 +82,26 @@ const login = ({ userName, password }) => {
 
 const addUser = async ({ user }) => {
     // ommit pwd if empty
-    if(!user.password){
+    if (!user.password) {
         delete user.password;
     }
-    const existingUser = await User.findOne({ userName: user.userName }).exec();
-    if (existingUser) {
-        console.log(existingUser.id, user.id)
-        if (existingUser.id !== user.id) {
-            throw new Error('UserName already exists!')
-        }
-        // update
-        return Object.assign(existingUser, user).save();
+    const count = await User.countDocuments({ userName: user.userName, _id: { $ne: user.id } });
+
+    if (count > 0) {
+        throw new Error('UserName already exists!')
     }
-    if (user.id) {
-        return User.findByIdAndUpdate(user.id, user, { new: true });
-    }
-    
-    return User.create(user);
+    let usr = null;
+    if (user.id)
+        usr = await User.findByIdAndUpdate(user.id, user, { new: true });
+    else
+        usr = await User.create(user);
+
+    usr = await Role.findById(usr.role).then(role => {
+        usr.role = role;
+        return usr;
+    });
+
+    return transformUser(usr)
 }
 
 const addRole = async ({ id, name, privileges, isActive }) => {
@@ -117,10 +120,10 @@ const addRole = async ({ id, name, privileges, isActive }) => {
 }
 
 const users = () => {
-    return User.find().populate('role').then(users=>users.map(u=>transformUser(u)));
+    return User.find().populate('role').then(users => users.map(u => transformUser(u)));
 }
 const user = ({ id }) => {
-    return User.findById(id).populate('role').map(u=>transformUser(u));
+    return User.findById(id).populate('role').map(u => transformUser(u));
 }
 const roles = () => {
     return Role.find();
