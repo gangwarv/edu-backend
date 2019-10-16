@@ -1,7 +1,7 @@
 const Course = require('../../models/shared/course');
 const AcademicDepartment = require('../../models/shared/academicdepartment');
 
-addCourse = async ({ course }) => {
+addCourse = async ({ course }, req, res) => {
     const dept = await AcademicDepartment.findById(course.department);
     const newCourse = {
         ...course,
@@ -10,11 +10,11 @@ addCourse = async ({ course }) => {
     var createdCourse = null;
 
     const id = newCourse.id;
-    if (id) 
+    if (id)
         createdCourse = await Course.findByIdAndUpdate({ _id: id }, newCourse, { new: true });
-    else 
+    else
         createdCourse = await Course.create(newCourse);
-    
+
     if (dept.courses.indexOf(createdCourse.id) === -1) {
         dept.courses.push(createdCourse.id);
         await dept.save();
@@ -40,15 +40,17 @@ toggleCourse = async ({ id }) => {
     }
 }
 
-const courses = async ({ isActive, department }, req) => {
+const courses = async ({ isActive, department }, req,res) => {
+    // console.log('req', req.isAuth,req.userId, req.roles);
+    // req.passed('user-create')
     const filter = {};
-    
+
     if (isActive !== undefined)
         filter['isActive'] = isActive
     if (department) {
         filter['department'] = department;
     }
-    
+
     return Course.find(filter);
 }
 
