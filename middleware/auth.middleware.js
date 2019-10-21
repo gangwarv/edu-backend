@@ -9,8 +9,9 @@ module.exports = function (req, res, next) {
     }
 
     try {
-        const { userId, privileges, ...rest } = jwt.verify(token, 'secret');
+        const { userId, privileges,userName, ...rest } = jwt.verify(token, 'secret');
         req.userId = userId;
+        req.userName = userName;
         req.isAuth = true;
 
         req.roles = privileges;
@@ -20,7 +21,7 @@ module.exports = function (req, res, next) {
     catch {
         req.isAuth = false;
     }
-    console.log('req', req.isAuth,req.userId, req.roles);
+    console.warn('req', req.isAuth,req.userId,req.isAuth,req.userName, req.roles);
     next();
 }
 

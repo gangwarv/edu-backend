@@ -1,7 +1,7 @@
 module.exports = {
     categoryTypes: `
     type Category {
-        _id: ID!
+        id: ID!
         name: String!
     }
     `,
@@ -9,6 +9,7 @@ module.exports = {
     categories(isActive: Boolean): [Category!]!
     `,
     categoryMutations: `
-    addCategory(name: String!): Category!
+    addCategory(id: String, name: String!): Category!
+    deleteCategory(id: String!): Category!
     `
 }
