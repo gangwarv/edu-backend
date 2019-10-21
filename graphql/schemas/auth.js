@@ -28,6 +28,7 @@ module.exports = {
         password: String
         mobile: String!
         userType: String!
+        userRef: String
         isActive: Boolean!
 
         email: String
@@ -39,7 +40,7 @@ module.exports = {
         privileges: String!
     }
     input UserInput {
-        id: ID
+        id: String
         firstName: String!
         lastName: String!
         userName: String!
