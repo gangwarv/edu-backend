@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
     }
 
     try {
-        const { userId, privileges,userName, ...rest } = jwt.verify(token, 'secret');
+        const { userId, privileges, userName, ...rest } = jwt.verify(token, 'secret');
         req.userId = userId;
         req.userName = userName;
         req.isAuth = true;
@@ -21,28 +21,9 @@ module.exports = function (req, res, next) {
     catch {
         req.isAuth = false;
     }
-    console.warn('req', req.isAuth,req.userId,req.isAuth,req.userName, req.roles);
+    console.warn('req', req.isAuth,req.userId,req.userName,req.roles);
     next();
 }
-
-// function Role(roles) {
-//     this.roles = roles;
-// }
-// Role.prototype.has = function(roleName) {
-//     return this.roles.toString()
-//     .toLowerCase()
-//     .indexOf(roleName.toLowerCase()) > -1;
-// }
-// Role.prototype.passed = function(roleName) {
-//     const rolesFlat = this.roles.toString().toLowerCase();
-//     if(!roleName || rolesFlat === 'admin' || rolesFlat.indexOf(roleName.toLowerCase()) > -1){
-//         return;
-//     }
-//     throw new Error("Access-denied");
-// }
-// Role.prototype.getRoles = function() {
-//     return this.roles;
-// }
 
 function passed(roleName) {
     if (!this.hasRole(roleName)) {

@@ -70,6 +70,7 @@ const login = ({ userName, password }) => {
 
 
 const addUser = async ({ user }) => {
+    req.passed('user-create');
     // ommit pwd if empty
     if (!user.password) {
         delete user.password;
@@ -90,6 +91,7 @@ const addUser = async ({ user }) => {
 }
 
 const addRole = async ({ id, name, privileges, isActive }) => {
+    req.passed('role-create');
     privileges = privileges.split(',').sort().toString();
 
     let existingDoc = null;
@@ -117,6 +119,8 @@ const role = ({ id }) => {
     return Role.findById(id);
 }
 const deleteRole = async ({ id }) => {
+    req.passed('role-delete');
+    
     const roleCount = await Role.countDocuments({ _id: id });
 
     if (roleCount === 0) {

@@ -7,9 +7,10 @@ module.exports = {
     `,
     categoryQueries: `
     categories(isActive: Boolean): [Category!]!
+    category(id: String!): Category!
     `,
     categoryMutations: `
-    addCategory(id: String, name: String!): Category!
+    addCategory(id: String, name: String!, isActive: Boolean!): Category!
     deleteCategory(id: String!): Category!
     `
 }

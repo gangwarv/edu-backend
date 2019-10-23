@@ -2,6 +2,7 @@ const AcademicDepartment = require('../../models/shared/academicdepartment');
 const Course = require('../../models/shared/course');
 
 const addAcDept = async ({ dept: { id, name, isActive } }) => {
+    req.passed('course-create');
     let newDept;
     if (id)
         newDept = await AcademicDepartment.findByIdAndUpdate(id, { name, isActive }, { new: true });
@@ -18,7 +19,7 @@ const addAcDept = async ({ dept: { id, name, isActive } }) => {
 }
 
 const toggleAcDept = async ({ id }, req) => {
-    req.roles.passed('add-course');
+    req.roles.passed('course-create');
     try {
         let dept = await AcademicDepartment.findById(id);
         dept.isActive = !dept.isActive;
@@ -34,7 +35,7 @@ const toggleAcDept = async ({ id }, req) => {
     }
 }
 const deleteAcDept = async ({ id }, req) => {
-    req.roles.passed('add-course');
+    req.passed('course-delete');
 
     const courseCount = await Course.countDocuments({ department: id });
 

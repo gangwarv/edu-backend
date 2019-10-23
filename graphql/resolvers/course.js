@@ -2,6 +2,7 @@ const Course = require('../../models/shared/course');
 const AcademicDepartment = require('../../models/shared/academicdepartment');
 
 addCourse = async ({ course }, req, res) => {
+    req.passed('course-create');
     const dept = await AcademicDepartment.findById(course.department);
     const newCourse = {
         ...course,
@@ -23,6 +24,7 @@ addCourse = async ({ course }, req, res) => {
     return createdCourse;
 }
 toggleCourse = async ({ id }) => {
+    req.passed('course-create');
     try {
         const course = await Course.findById(id)
         const dept = await AcademicDepartment.findById(course.department);
@@ -41,8 +43,6 @@ toggleCourse = async ({ id }) => {
 }
 
 const courses = async ({ isActive, department }, req,res) => {
-    // console.log('req', req.isAuth,req.userId, req.roles);
-    // req.passed('user-create')
     const filter = {};
 
     if (isActive !== undefined)
