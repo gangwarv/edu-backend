@@ -17,11 +17,12 @@ module.exports = function (req, res, next) {
         req.roles = privileges;
         req.passed = passed.bind(req);
         req.hasRole = hasRole.bind(req);
+        // req.hasAny = hasAny.bind(req);
     }
     catch {
         req.isAuth = false;
     }
-    console.warn('req', req.isAuth,req.userId,req.userName,req.roles);
+    console.warn('request', req.isAuth, req.userId, req.userName, req.roles);
     next();
 }
 
@@ -30,7 +31,7 @@ function passed(roleName) {
         throw new Error('access-denied');
     }
 }
-function hasRole(roleName) {
+function hasRole(roleName = '') {
     return this.isAuth
         &&
         (
@@ -39,3 +40,13 @@ function hasRole(roleName) {
             this.roles.includes(roleName)
         );
 }
+// function hasAny(roleName = '') {
+//     return this.isAuth
+//         &&
+//         (
+//             this.roles.includes('admin')
+//             ||
+//             roleName.split(',').some(role => this.roles.includes(role))
+
+//         );
+// }

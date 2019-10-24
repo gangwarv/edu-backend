@@ -4,6 +4,7 @@ module.exports = {
         userId: String!
         userName: String!
         token: String!
+        validFrom: Float!
         expiresIn: Float!
         roleName: String!
         privileges: String!

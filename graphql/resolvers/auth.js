@@ -43,29 +43,32 @@ function transformUser(userDoc) {
     }
 }
 
-const login = ({ userName, password }) => {
+const login = async ({ userName, password }, req) => {
     const expiresIn = 600; // in seconds
-    return User.findOne({ userName, isActive: true }).populate('role').then(user => {
-        if (!user)
-            throw new Error('User does not exists!')
-        if (user.blocked)
-            throw new Error('Your account has been blocked!')
-        if (password !== user.password) {
-            throw new Error('Invalid credentials!')
-        }
-        const data = {
-            userId: user.id,
-            userName: user.userName,
-            roleName: user.role.name,
-            privileges: user.role.privileges
-        }
-        const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
-        return {
-            ...data,
-            token,
-            expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
-        };
-    })
+    const userId = req.userId;
+    const user = await User.findOne({ $and: [{ $or: [{ userName }, { _id: userId }] }, { isActive: true }] }).populate('role');
+
+    if (!user)
+        throw new Error('User does not exists!')
+    if (user.blocked)
+        throw new Error('Your account has been blocked!')
+    if (password !== user.password) {
+        throw new Error('Invalid credentials!')
+    }
+    const data = {
+        userId: user.id,
+        userName: user.userName,
+        roleName: user.role.name,
+        privileges: user.role.privileges,
+    }
+    const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
+
+    return {
+        ...data,
+        token,
+        validFrom: new Date().getTime(),
+        expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
+    };
 }
 
 
@@ -120,7 +123,7 @@ const role = ({ id }) => {
 }
 const deleteRole = async ({ id }) => {
     req.passed('role-delete');
-    
+
     const roleCount = await Role.countDocuments({ _id: id });
 
     if (roleCount === 0) {
