@@ -43,33 +43,37 @@ function transformUser(userDoc) {
     }
 }
 
-const login = ({ userName, password }) => {
+const login = async ({ userName, password }, req) => {
     const expiresIn = 600; // in seconds
-    return User.findOne({ userName, isActive: true }).populate('role').then(user => {
-        if (!user)
-            throw new Error('User does not exists!')
-        if (user.blocked)
-            throw new Error('Your account has been blocked!')
-        if (password !== user.password) {
-            throw new Error('Invalid credentials!')
-        }
-        const data = {
-            userId: user.id,
-            userName: user.userName,
-            roleName: user.role.name,
-            privileges: user.role.privileges
-        }
-        const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
-        return {
-            ...data,
-            token,
-            expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
-        };
-    })
+    const userId = req.userId;
+    const user = await User.findOne({ $and: [{ $or: [{ userName }, { _id: userId }] }, { isActive: true }] }).populate('role');
+
+    if (!user)
+        throw new Error('User does not exists!')
+    if (user.blocked)
+        throw new Error('Your account has been blocked!')
+    if (password !== user.password) {
+        throw new Error('Invalid credentials!')
+    }
+    const data = {
+        userId: user.id,
+        userName: user.userName,
+        roleName: user.role.name,
+        privileges: user.role.privileges,
+    }
+    const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
+
+    return {
+        ...data,
+        token,
+        validFrom: new Date().getTime(),
+        expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
+    };
 }
 
 
 const addUser = async ({ user }) => {
+    req.passed('user-create');
     // ommit pwd if empty
     if (!user.password) {
         delete user.password;
@@ -90,6 +94,7 @@ const addUser = async ({ user }) => {
 }
 
 const addRole = async ({ id, name, privileges, isActive }) => {
+    req.passed('role-create');
     privileges = privileges.split(',').sort().toString();
 
     let existingDoc = null;
@@ -117,6 +122,8 @@ const role = ({ id }) => {
     return Role.findById(id);
 }
 const deleteRole = async ({ id }) => {
+    req.passed('role-delete');
+
     const roleCount = await Role.countDocuments({ _id: id });
 
     if (roleCount === 0) {

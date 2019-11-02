@@ -2,6 +2,7 @@ const Category = require('../../models/shared/category');
 const { generateNext } = require('../../helpers/sequence');
 
 const addCategory = async ({ id, name, isActive }) => {
+    req.passed('category-create');
     let newDoc;
     // let seq = await generateNext('category', 4);
     if (id)
@@ -16,6 +17,7 @@ const addCategory = async ({ id, name, isActive }) => {
 }
 
 const deleteCategory = async ({ id }, req) => {
+    req.passed('category-delete');
     // const courseCount = await Course.countDocuments({ department: id });
 
     // if (courseCount > 0) {
