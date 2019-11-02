@@ -8,7 +8,7 @@ const addCategory = async ({ id, name, isActive }) => {
         newDoc = await Category.findByIdAndUpdate(id, { name, isActive }, { new: true });
     else
         newDoc = await Category.create({
-            name: name + seq,
+            name,
             isActive: true
         });
 
