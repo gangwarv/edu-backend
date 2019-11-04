@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/graphql', delay, authMiddleware, graphqlMiddleware);
 
 app.get('/', function(req, res, next){
-  res.send('Express App')
+  res.send('Express App!')
 });
 
 
