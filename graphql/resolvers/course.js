@@ -1,7 +1,7 @@
 const Course = require('../../models/shared/course');
 const AcademicDepartment = require('../../models/shared/academicdepartment');
 
-addCourse = async ({ course }, req, res) => {
+addCourse = async ({ course }, req) => {
     req.passed('course-create');
     const dept = await AcademicDepartment.findById(course.department);
     const newCourse = {
