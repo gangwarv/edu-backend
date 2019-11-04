@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "mocha tests/*.js --exit",
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
