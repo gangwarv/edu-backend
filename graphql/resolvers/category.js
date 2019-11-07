@@ -1,7 +1,7 @@
 const Category = require('../../models/shared/category');
 const { generateNext } = require('../../helpers/sequence');
 
-const addCategory = async ({ id, name, isActive }) => {
+const addCategory = async ({ id, name, isActive }, req) => {
     req.passed('category-create');
     let newDoc;
     // let seq = await generateNext('category', 4);

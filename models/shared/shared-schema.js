@@ -12,6 +12,10 @@ const address = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
+    state: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
     pin: {
         type: String,
         require: true,

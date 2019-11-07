@@ -43,17 +43,13 @@ const schema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
-    // city: {
-    //     type: mongoose.Types.ObjectId,
-    //     required: true
-    // },
-    paddresses: address,
-    caddresses: address,
+    paddress: address,
+    caddress: address,
     nationality: {
         type: String,
         required: true,
         default: 'indian'
     },
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Registration', schema);
+module.exports = mongoose.model('Student', schema);
