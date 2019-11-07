@@ -44,15 +44,23 @@ function transformUser(userDoc) {
 }
 
 const login = async ({ userName, password }, req) => {
-    const expiresIn = 600; // in seconds
+    const expiresIn = 300; // in seconds
     const userId = req.userId;
-    const user = await User.findOne({ $and: [{ $or: [{ userName }, { _id: userId }] }, { isActive: true }] }).populate('role');
+    const user = await User.findOne({
+        $and: [
+            {
+                $or: [{ userName }, { _id: userId }]
+            },
+            {
+                isActive: true
+            }]
+    }).populate('role');
 
     if (!user)
         throw new Error('User does not exists!')
     if (user.blocked)
         throw new Error('Your account has been blocked!')
-    if (password !== user.password) {
+    if (!req.isAuth && password !== user.password) {
         throw new Error('Invalid credentials!')
     }
     const data = {
@@ -72,7 +80,7 @@ const login = async ({ userName, password }, req) => {
 }
 
 
-const addUser = async ({ user }) => {
+const addUser = async ({ user }, req) => {
     req.passed('user-create');
     // ommit pwd if empty
     if (!user.password) {
@@ -93,7 +101,7 @@ const addUser = async ({ user }) => {
     return transformUser(createdUser)
 }
 
-const addRole = async ({ id, name, privileges, isActive }) => {
+const addRole = async ({ id, name, privileges, isActive }, req) => {
     req.passed('role-create');
     privileges = privileges.split(',').sort().toString();
 
