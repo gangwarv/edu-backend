@@ -3,6 +3,7 @@ module.exports = {
     type Category {
         id: ID!
         name: String!
+        isActive: Boolean!
     }
     `,
     categoryQueries: `
