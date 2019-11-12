@@ -1,7 +1,7 @@
 const AcademicDepartment = require('../../models/shared/academicdepartment');
 const Course = require('../../models/shared/course');
 
-const addAcDept = async ({ dept: { id, name, isActive } }) => {
+const addAcDept = async ({ dept: { id, name, isActive } }, req) => {
     req.passed('course-create');
     let newDept;
     if (id)
