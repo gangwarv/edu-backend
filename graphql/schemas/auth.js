@@ -4,6 +4,7 @@ module.exports = {
         userId: String!
         userName: String!
         token: String!
+        menus: [Menu!]!
         validFrom: Float!
         expiresIn: Float!
         roleName: String!
@@ -54,13 +55,12 @@ module.exports = {
         role: String!
     }
     type Menu {
-        sortOrder: String
-        module: String!
         text: String!
         path: String!
+        module: String!
+        privilege: String
         position: String!
     }
-
     `,
     authQueries: `
     menus: [Menu!]!
