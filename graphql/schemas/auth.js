@@ -4,6 +4,7 @@ module.exports = {
         userId: String!
         userName: String!
         token: String!
+        menus: [Menu!]!
         validFrom: Float!
         expiresIn: Float!
         roleName: String!
@@ -58,10 +59,10 @@ module.exports = {
         text: String!
         path: String!
         module: String!
+        privilege: String
         position: String!
         privilege: String
     }
-
     `,
     authQueries: `
     menus: [Menu!]!

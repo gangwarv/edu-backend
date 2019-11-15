@@ -5,25 +5,53 @@ const AppModule = require('../../models/app-management/appmodule')
 const maxLoginAttempts = 50;
 const menusData = [
     {
-        "sortOrder": 0,
-        "module": "User Management",
-        "text": "Profile",
-        "path": "/profile",
-        "position": "top"
+        text: "Hello",
+        path: "/hello",
+        module: "Home",
+        privilege: null,
+        position: 'left'
     },
     {
-        "sortOrder": 20,
-        "module": "Attendance",
-        "text": "Submit Attendance",
-        "path": "/attendance/take",
-        "position": "left"
+        text: "Academic Departments",
+        path: "/acdepts",
+        module: "EDP",
+        privilege: 'course-view',
+        position: 'left'
     },
     {
-        "sortOrder": 30,
-        "module": "Attendance",
-        "text": "View Attendance",
-        "path": "/attendance/view",
-        "position": "left"
+        text: "Courses",
+        path: "/courses",
+        module: "Master",
+        privilege: 'course-view',
+        position: 'left'
+    },
+    {
+        text: "Categories",
+        path: "/categories",
+        privilege: 'category-view',
+        module: "Master",
+        position: 'left'
+    },
+    {
+        text: "Users",
+        path: "/users",
+        module: "EDP",
+        privilege: 'user-view',
+        position: 'left'
+    },
+    {
+        text: "Role",
+        path: "/roles",
+        module: "EDP",
+        privilege: 'role-view',
+        position: 'left'
+    },
+    {
+        text: "Profile",
+        path: "/profile",
+        module: "EDP",
+        privilege: null,
+        position: 'top'
     }
 ];
 const menus = (args, req) => {
@@ -70,10 +98,11 @@ const login = async ({ userName, password }, req) => {
         privileges: user.role.privileges,
     }
     const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
-
+    const menus = menusData.filter(menu => !menu.privilege || data.privileges.includes(menu.privilege))
     return {
         ...data,
         token,
+        menus,
         validFrom: new Date().getTime(),
         expiresIn: new Date(new Date().getTime() + (expiresIn - 1) * 1000).getTime()
     };
@@ -129,7 +158,7 @@ const roles = () => {
 const role = ({ id }) => {
     return Role.findById(id);
 }
-const deleteRole = async ({ id }) => {
+const deleteRole = async ({ id }, req) => {
     req.passed('role-delete');
 
     const roleCount = await Role.countDocuments({ _id: id });
