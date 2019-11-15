@@ -8,6 +8,7 @@ module.exports = {
         expiresIn: Float!
         roleName: String!
         privileges: String!
+        menus: [Menu!]
     }
     type AppModule {
         id: ID!
@@ -54,11 +55,11 @@ module.exports = {
         role: String!
     }
     type Menu {
-        sortOrder: String
-        module: String!
         text: String!
         path: String!
+        module: String!
         position: String!
+        privilege: String
     }
 
     `,
