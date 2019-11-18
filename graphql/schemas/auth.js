@@ -9,7 +9,6 @@ module.exports = {
         expiresIn: Float!
         roleName: String!
         privileges: String!
-        menus: [Menu!]
     }
     type AppModule {
         id: ID!
@@ -61,7 +60,6 @@ module.exports = {
         module: String!
         privilege: String
         position: String!
-        privilege: String
     }
     `,
     authQueries: `
