@@ -54,12 +54,6 @@ const menusData = [
         position: 'top'
     }
 ];
-const menus = (args, req) => {
-    if (!req.isAuth) {
-        throw new Error("Unauthorized!");
-    }
-    return menusData;
-}
 
 function transformUser(userDoc) {
     return {
@@ -98,7 +92,7 @@ const login = async ({ userName, password }, req) => {
         privileges: user.role.privileges,
     }
     const token = jwt.sign(data, 'secret', { expiresIn: expiresIn });
-    const menus = menusData.filter(menu => !menu.privilege || data.privileges.includes(menu.privilege))
+    const menus = menusData.filter(menu => !menu.privilege || data.privileges.includes(menu.privilege) || data.privileges.includes('admin'))
     return {
         ...data,
         token,
@@ -178,7 +172,6 @@ const appmodules = () => {
 }
 module.exports = {
     appmodules,
-    menus,
     roles,
     role,
     users,

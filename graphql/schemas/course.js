@@ -31,6 +31,7 @@ module.exports = {
     `,
     courseMutations: `
     addCourse(course: CourseInput!): Course!
+    deleteCourse(id: String!): Course!
     toggleCourse(id: String!): Course!
     `
 }

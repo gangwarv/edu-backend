@@ -21,8 +21,8 @@ app.get('/', function(req, res, next){
   res.send('Express App!')
 });
 
-// mongoose.connect('mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority', 
-mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', 
+mongoose.connect('mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority', 
+// mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', 
 { 
   useNewUrlParser: true,
   //useCreateIndex:true 
