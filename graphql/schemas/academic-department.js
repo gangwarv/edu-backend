@@ -1,5 +1,5 @@
-module.exports = {
-    acDeptTypes: `
+module.exports = [
+    `
     type AcademicDepartment {
         id: String
         name: String!
@@ -14,13 +14,13 @@ module.exports = {
         isActive: Boolean!
     }
     `,
-    acDeptQueries: `
+     `
     acDepts(isActive: Boolean): [AcademicDepartment!]!
     acDept(id: String!): AcademicDepartment!
     `,
-    acDeptMutations: `
+    `
         addAcDept(dept: AcademicDepartmentInput): AcademicDepartment!
         toggleAcDept(id: String!): AcademicDepartment!
         deleteAcDept(id: String!): AcademicDepartment!
     `
-}
+];

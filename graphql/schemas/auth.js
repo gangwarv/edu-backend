@@ -1,5 +1,5 @@
-module.exports = {
-    authTypes: `
+module.exports = [
+    `
     type AuthData {
         userId: String!
         userName: String!
@@ -62,7 +62,7 @@ module.exports = {
         position: String!
     }
     `,
-    authQueries: `
+    `
     menus: [Menu!]!
 
     users: [User!]!
@@ -71,7 +71,7 @@ module.exports = {
     role(id:String!): Role!
     appmodules: [AppModule!]!
     `,
-    authMutations: `
+   `
     login(userName: String!, password: String!): AuthData!
 
     addUser(user: UserInput): User!
@@ -79,4 +79,4 @@ module.exports = {
     addRole(id: String, name: String!, privileges: String!, isActive: Boolean): Role!
     deleteRole(id: String!): Role!
     `
-}
+];

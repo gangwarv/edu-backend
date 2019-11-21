@@ -1,5 +1,5 @@
-module.exports = {
-    courseTypes: `
+module.exports = [
+    `
     type Course {
         id: ID!
         code: String!
@@ -25,12 +25,12 @@ module.exports = {
         isActive: Boolean
     }
     `,
-    courseQueries: `
+    `
     courses(isActive: Boolean, department: String): [Course!]!
     course(id: String!): Course!
     `,
-    courseMutations: `
+    `
     addCourse(course: CourseInput!): Course!
     toggleCourse(id: String!): Course!
     `
-}
+]
