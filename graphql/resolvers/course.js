@@ -58,10 +58,22 @@ const course = ({ id }, req) => {
     return Course.findById(id);
 }
 
+const deleteCourse = async ({ id }, req) => {
+    req.passed('course-delete');
+    const count = await Course.countDocuments({ _id: id });
+
+    if (count === 0) {
+        throw new Error("Course does not exists!")
+    }
+    return Course.findByIdAndDelete(id);
+}
+
+
 module.exports =
     {
         addCourse,
         toggleCourse,
+        deleteCourse,
         courses,
         course
     }

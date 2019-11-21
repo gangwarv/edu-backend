@@ -18,11 +18,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/graphql', authMiddleware, graphqlMiddleware);
 
 app.get('/', function(req, res, next){
-  res.send('Express App!')
+  res.send('Express App!'+ process.env.DB_CONN)
 });
 
 // mongoose.connect('mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority', 
-mongoose.connect('mongodb://localhost:27017/eduerp?retryWrites=true', 
+mongoose.connect(process.env.DB_CONN || 'mongodb://localhost:27017/eduerp?retryWrites=true', 
 { 
   useNewUrlParser: true,
   //useCreateIndex:true 

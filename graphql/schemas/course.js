@@ -31,6 +31,7 @@ module.exports = [
     `,
     `
     addCourse(course: CourseInput!): Course!
+    deleteCourse(id: String!): Course!
     toggleCourse(id: String!): Course!
     `
 ]
