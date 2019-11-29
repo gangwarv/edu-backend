@@ -1,26 +1,33 @@
 const { buildSchema } = require('graphql')
-const {authTypes, authQueries, authMutations} = require('./auth')
-const {categoryTypes, categoryQueries, categoryMutations } = require('./category')
-const {acDeptTypes, acDeptQueries, acDeptMutations } = require('./academic-department')
-const {courseTypes, courseQueries, courseMutations} = require('./course')
+const AuthSchema = require('./auth')
+const CategorySchema = require('./category')
+const AcDeptSchema = require('./academic-department')
+const CourseSchema = require('./course')
+
+// const FeeSchema = require('./fee-schema')
 
 module.exports = buildSchema(`
-${authTypes}
-${courseTypes}
-${acDeptTypes}
-${categoryTypes}
+${AuthSchema[0]}
+${CategorySchema[0]}
+${AcDeptSchema[0]}
+${CourseSchema[0]}
+
+ 
 
 type Query {
-    ${authQueries}
-    ${courseQueries}
-    ${acDeptQueries}
-    ${categoryQueries}
+    ${AuthSchema[1]}
+    ${CategorySchema[1]}
+    ${AcDeptSchema[1]}
+    ${CourseSchema[1]}
+
+  
 }
 
 type Mutation {
-    ${authMutations}
-    ${courseMutations}
-    ${acDeptMutations}
-    ${categoryMutations}
+    ${AuthSchema[2]}
+    ${CategorySchema[2]}
+    ${AcDeptSchema[2]}
+    ${CourseSchema[2]}
+    
 }
 `);

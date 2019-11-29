@@ -1,14 +1,17 @@
-module.exports = {
-    categoryTypes: `
+module.exports = [
+    `
     type Category {
-        _id: ID!
+        id: ID!
         name: String!
+        isActive: Boolean!
     }
     `,
-    categoryQueries: `
-    categories(isActive: Boolean): [Category!]!
-    `,
-    categoryMutations: `
-    addCategory(name: String!): Category!
     `
-}
+    categories(isActive: Boolean): [Category!]!
+    category(id: String!): Category!
+    `,
+     `
+    addCategory(id: String, name: String!, isActive: Boolean!): Category!
+    deleteCategory(id: String!): Category!
+    `
+]

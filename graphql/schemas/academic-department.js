@@ -1,17 +1,26 @@
-module.exports = {
-    acDeptTypes: `
+module.exports = [
+    `
     type AcademicDepartment {
-        _id: String
+        id: String
         name: String!
         isActive: Boolean!
         courses: [String!]!
+        createdAt: String!
+        updatedAt: String!
+    }
+    input AcademicDepartmentInput {
+        id: String
+        name: String!
+        isActive: Boolean!
     }
     `,
-    acDeptQueries: `
+     `
     acDepts(isActive: Boolean): [AcademicDepartment!]!
+    acDept(id: String!): AcademicDepartment!
     `,
-    acDeptMutations: `
-        addAcDept(name: String!): AcademicDepartment!
-        toggleAcDept(_id: String!): AcademicDepartment!
     `
-}
+        addAcDept(dept: AcademicDepartmentInput): AcademicDepartment!
+        toggleAcDept(id: String!): AcademicDepartment!
+        deleteAcDept(id: String!): AcademicDepartment!
+    `
+];

@@ -5,11 +5,6 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isActive: {
-        type: Boolean,
-        default: true,
-        required: true
-    }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Category', schema);
+module.exports = mongoose.model('State', schema);

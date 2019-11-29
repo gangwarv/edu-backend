@@ -1,28 +1,53 @@
-const { transformDocument } = require('../../helpers/transform')
 const AcademicDepartment = require('../../models/shared/academicdepartment');
+const Course = require('../../models/shared/course');
 
-const addAcDept = ({ name }) => {
-    return AcademicDepartment.create({
-        name,
-        isActive: true,
-        courses: []
-    })
-        .then(_ => {
-            return transformDocument(_);
-        })
+const addAcDept = async ({ dept: { id, name, isActive } }, req) => {
+    req.passed('course-create');
+    let newDept;
+    if (id)
+        newDept = await AcademicDepartment.findByIdAndUpdate(id, { name, isActive }, { new: true });
+    else
+        newDept = await AcademicDepartment.create({
+            name,
+            isActive: true,
+            courses: []
+        });
+
+    await Course.updateMany({ department: newDept.id }, { departmentName: newDept.name });
+
+    return newDept;
 }
 
-const toggleAcDept = async ({ _id }) => {
+const toggleAcDept = async ({ id }, req) => {
+    req.roles.passed('course-create');
     try {
-        const dept = await AcademicDepartment.findById(_id)
+        let dept = await AcademicDepartment.findById(id);
         dept.isActive = !dept.isActive;
+        dept = await dept.save();
 
-        return dept.save()
-            .then(d => transformDocument(d));
+        if (!dept.isActive)
+            await Course.updateMany({ department: dept.id }, { isActive: false });
+
+        return dept;
     }
     catch (err) {
         throw err;
     }
+}
+const deleteAcDept = async ({ id }, req) => {
+    req.passed('course-delete');
+
+    const courseCount = await Course.countDocuments({ department: id });
+
+    if (courseCount > 0) {
+        throw new Error("Kindly detach all its associated entities first.")
+    }
+    const deptCount = await AcademicDepartment.countDocuments({ _id: id });
+
+    if (deptCount === 0) {
+        throw new Error("Academic Department does not exists!")
+    }
+    return AcademicDepartment.findByIdAndDelete(id);
 }
 
 const acDepts = (args) => {
@@ -33,30 +58,14 @@ const acDepts = (args) => {
     }
     return AcademicDepartment.find(filter);
 }
-const updateAcDept = async ({ _id, name, isActive }) => {
-    try {
-        const dept = await AcademicDepartment.findById(_id)
-        dept.name = name.trim();
-        dept.isActive = isActive;
+const acDept = ({ id }) => {
+    return AcademicDepartment.findById(id);
+}
 
-        return dept.save()
-            .then(d => transformDocument(d));
-    }
-    catch (err) {
-        throw err;
-    }
-}
-const insertMany = async ({ depts }) => {
-    try {
-        const dept = await AcademicDepartment.insertMany(depts);
-    }
-    catch (err) {
-        throw err;
-    }
-}
 module.exports = {
+    acDepts,
+    acDept,
     addAcDept,
     toggleAcDept,
-    acDepts,
-    updateAcDept
+    deleteAcDept
 }

@@ -5,11 +5,9 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isActive: {
-        type: Boolean,
-        default: true,
-        required: true
+    type: {
+        type: String
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Category', schema);
+module.exports = mongoose.model('FeeItem', schema);

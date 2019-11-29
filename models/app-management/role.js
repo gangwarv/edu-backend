@@ -8,6 +8,10 @@ const schema = new mongoose.Schema({
     privileges: {
         type: String,
         required: true
+    },
+    isActive: {
+        type: Boolean,
+        required: true
     }
 }, { timestamps: true });
 

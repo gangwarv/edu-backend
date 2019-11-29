@@ -23,3 +23,9 @@ yarn-error.log*
 #custom
 *.zip
 *.rar
+import-data.js
+
+#openode
+.openode
+docker-compose.yml
+Dockerfile

@@ -1,44 +1,82 @@
-module.exports = {
-    authTypes: `
+module.exports = [
+    `
     type AuthData {
-        token: String
         userId: String!
         userName: String!
-        expiresIn: Int!
-        role: Role
-    }
-    type Role {
-        _id: ID!
-        name: String!
-        isActive: Boolean
+        token: String!
+        menus: [Menu!]!
+        validFrom: Float!
+        expiresIn: Float!
+        roleName: String!
         privileges: String!
     }
+    type AppModule {
+        id: ID!
+        name: String!
+        privileges: String!
+        isActive: Boolean
+    }
+    type Role {
+        id: ID!
+        name: String!
+        privileges: String!
+        isActive: Boolean
+    }
     type User {
-        _id: ID!
+        id: ID!
+        firstName: String!
+        lastName: String!
         userName: String!
-        password: String!
+        password: String
+        mobile: String!
         userType: String!
-        role: Role!
+        userRef: String
+        isActive: Boolean!
+
+        email: String
+        blocked: Boolean
+        retryAttempts: Int
+
+        role: String!
+        roleName: String!
+        privileges: String!
+    }
+    input UserInput {
+        id: String
+        firstName: String!
+        lastName: String!
+        userName: String!
+        password: String
+        mobile: String!
+        userType: String!
+        userRef: String
+        email: String
+        isActive: Boolean!
+        role: String!
     }
     type Menu {
-        sortOrder: String
-        module: String!
         text: String!
         path: String!
+        module: String!
+        privilege: String
         position: String!
     }
-
     `,
-    authQueries: `
+    `
     menus: [Menu!]!
 
-    get: String
     users: [User!]!
+    user(id:String!): User!
     roles: [Role!]!
+    role(id:String!): Role!
+    appmodules: [AppModule!]!
     `,
-    authMutations: `
+   `
     login(userName: String!, password: String!): AuthData!
-    addUser(userName: String!, password: String!, role: String!): User!
-    addRole(name: String!, privileges: String!): Role!
+
+    addUser(user: UserInput): User!
+
+    addRole(id: String, name: String!, privileges: String!, isActive: Boolean): Role!
+    deleteRole(id: String!): Role!
     `
-}
+];

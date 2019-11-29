@@ -5,11 +5,11 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isActive: {
-        type: Boolean,
-        default: true,
-        required: true
-    }
+    state: {
+        type: mongoose.Types.ObjectId,
+        require: true,
+        ref: "State"
+    },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Category', schema);
+module.exports = mongoose.model('City', schema);

@@ -1,7 +1,7 @@
-module.exports = {
-    courseTypes: `
+module.exports = [
+    `
     type Course {
-        _id: ID!
+        id: ID!
         code: String!
         type: String!
         name: String!
@@ -9,21 +9,29 @@ module.exports = {
         isLateral: Boolean!
         departmentName: String!
         department: String!
+        activeForAdmission: Boolean
+        duration: String!
+        createdAt: String!
+        updatedAt: String!
     }
     input CourseInput {
+        id: String
         code: String!
         type: String!
         name: String!
         department: String!
+        duration: String!
         isLateral: Boolean
+        isActive: Boolean
     }
     `,
-    courseQueries: `
-    courses(isActive: Boolean): [Course!]!
-    course(_id: String!): Course!
-    `,
-    courseMutations: `
-    addCourse(course: CourseInput!): Course!
-    toggleCourse(_id: String!): Course!
     `
-}
+    courses(isActive: Boolean, department: String): [Course!]!
+    course(id: String!): Course!
+    `,
+    `
+    addCourse(course: CourseInput!): Course!
+    deleteCourse(id: String!): Course!
+    toggleCourse(id: String!): Course!
+    `
+]

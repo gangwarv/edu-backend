@@ -3,36 +3,54 @@ const jwt = require('jsonwebtoken')
 module.exports = function (req, res, next) {
     const token = req.headers["authorization"] && req.headers["authorization"].split(' ')[1] || "";
 
-    if (!token) {
-        // req.isAuth = false;
-        // return next();
-        // temp
-        req.userId = '5d6647a7336a97121ce90776';
-        req.isAuth = true;
-        req.roles = new Role(['admin']);
-        return next();
-    }
+
 
     try {
-        const { userId, roles } = jwt.verify(token, 'secret');
-        req.userId = userId;
+        if (!token) {
+            // temp
+            req.isAuth = true;
+            req.roles = 'admin';
+        }
+        else {
+            const { userId, privileges, userName, ...rest } = jwt.verify(token, 'secret');
+            req.userId = userId;
+            req.userName = userName;
+            req.roles = privileges;
+        }
         req.isAuth = true;
-        req.roles = new Role(roles);
     }
     catch {
         req.isAuth = false;
+        req.roles = '';
     }
+    req.passed = passed.bind(req);
+    req.hasRole = hasRole.bind(req);
+
+    console.warn('request', req.isAuth, req.userId, req.userName, req.roles);
     next();
 }
 
-function Role(roles) {
-    this.roles = roles;
+function passed(roleName) {
+    if (!this.hasRole(roleName)) {
+        throw new Error('access-denied');
+    }
 }
-Role.prototype.has = function(roleName) {
-    return this.roles.toString()
-    .toLowerCase()
-    .indexOf(roleName.toLowerCase()) > -1;
+function hasRole(roleName = '') {
+    return this.isAuth
+        &&
+        (
+            this.roles.includes('admin')
+            ||
+            this.roles.includes(roleName)
+        );
 }
-Role.prototype.getRoles = function() {
-    return this.roles;
-}
+// function hasAny(roleName = '') {
+//     return this.isAuth
+//         &&
+//         (
+//             this.roles.includes('admin')
+//             ||
+//             roleName.split(',').some(role => this.roles.includes(role))
+
+//         );
+// }
