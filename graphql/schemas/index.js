@@ -4,14 +4,14 @@ const CategorySchema = require('./category')
 const AcDeptSchema = require('./academic-department')
 const CourseSchema = require('./course')
 
-// const FeeSchema = require('./fee-schema')
+const FeeSchema = require('./fee-schema')
 
 module.exports = buildSchema(`
 ${AuthSchema[0]}
 ${CategorySchema[0]}
 ${AcDeptSchema[0]}
 ${CourseSchema[0]}
-
+${FeeSchema[0]}
  
 
 type Query {
@@ -19,6 +19,7 @@ type Query {
     ${CategorySchema[1]}
     ${AcDeptSchema[1]}
     ${CourseSchema[1]}
+    ${FeeSchema[1]}
 
   
 }
@@ -28,6 +29,6 @@ type Mutation {
     ${CategorySchema[2]}
     ${AcDeptSchema[2]}
     ${CourseSchema[2]}
-    
+    ${FeeSchema[2]}
 }
 `);

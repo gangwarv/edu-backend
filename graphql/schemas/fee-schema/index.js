@@ -1,4 +1,4 @@
-import FeeItemSchema from './fee-item'
+const FeeItemSchema = require('./fee-item')
 
 module.exports = [
     `
