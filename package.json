@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "mocha tests/*.js --exit",
-    "start": "set DB_CONN=mongodb://localhost:27017/eduerp?retryWrites=true & node ./bin/www",
+    "start": "set DB_CONN=mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority & node ./bin/www",
     "dev": "set DB_CONN=mongodb://localhost:27017/eduerp?retryWrites=true & node ./bin/www"
   },
   "dependencies": {
