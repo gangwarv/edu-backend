@@ -22,7 +22,7 @@ app.get('/', function(req, res, next){
 });
 
 // mongoose.connect('mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority', 
-mongoose.connect(MONGODB_URL, 
+mongoose.connect(MONGODB_URL || 'mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority', 
 { 
   useNewUrlParser: true,
   //useCreateIndex:true 
