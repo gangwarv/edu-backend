@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test": "mocha tests/*.js --exit",
-    "start": "set DB_CONN=mongodb://localhost:27017/eduerp?retryWrites=true & node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "set DB_CONN=mongodb://localhost:27017/eduerp?retryWrites=true & node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
