@@ -5,7 +5,7 @@
   "scripts": {
     "test": "mocha tests/*.js --exit",
     "start": "node ./bin/www",
-    "devrun": "set MONGODB_URL=mongodb://localhost:27017/eduerp?retryWrites=true & node ./bin/www",
+    "dev": "set MONGODB_URL=mongodb://localhost:27017/eduerp?retryWrites=true & node ./bin/www",
     "cloudrun": "set MONGODB_URL=mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority & node ./bin/www"
   },
   "dependencies": {
