@@ -1,55 +1,75 @@
-const mongoose = require('mongoose');
-const { mobile, address } = require('../shared/shared-schema');
+const mongoose = require("mongoose");
+const { mobile, address } = require("../shared/shared-schema");
 
-const schema = new mongoose.Schema({
+const schema = new mongoose.Schema(
+  {
     session: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     firstName: {
-        type: String,
-        lowercase: true, 
-        trim: true,
-        required: true
+      type: String,
+      lowercase: true,
+      trim: true,
+      required: true
     },
     lastName: {
-        type: String,
-        lowercase: true, 
-        trim: true,
-        required: true
+      type: String,
+      lowercase: true,
+      trim: true,
+      required: true
     },
     gender: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     dateOfBirth: {
-        type: Date
+      type: Date
     },
     mobile: mobile,
     email: {
-        type: String,
-        lowercase: true,
-        required: true
+      type: String,
+      lowercase: true,
+      required: true
     },
     course: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: "Course"
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: "Course"
     },
     lateralEntry: {
-        type: Boolean
+      type: Boolean
     },
     category: {
-        type: mongoose.Types.ObjectId,
-        required: true
+      type: mongoose.Types.ObjectId,
+      required: true
     },
     paddress: address,
     caddress: address,
     nationality: {
-        type: String,
-        required: true,
-        default: 'indian'
-    },
-}, { timestamps: true });
+      type: String,
+      enum: ["INDIAN", "NRI"],
+      required: true,
+      default: "INDIAN"
+    }
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Registration', schema);
+schema.virtual("fullName").get(function() {
+    return `${this.firstName} ${this.lastName}`;
+  });
+  schema.virtual("city").get(function() {
+    return this.paddress.city;
+  });
+  schema.virtual("cityName").get(function() {
+    return this.paddress.city.name;
+  });
+  schema.virtual("state").get(function() {
+    return this.paddress.state;
+  });
+  schema.virtual("stateName").get(function() {
+    return this.paddress.city.stateName;
+  });
+
+module.exports = mongoose.model("Registration", schema);

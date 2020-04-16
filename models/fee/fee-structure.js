@@ -2,19 +2,28 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema(
   {
-    // Admission-Session
     fsSession: {
       type: String,
       required: true
     },
-    course: {
-      type: mongoose.Types.ObjectId,
-      ref: "Course",
-      required: true
-    },
-    year: {
+    fsCategory: {
       type: String,
       required: true
+    },
+    course: {
+      // null in case of non-academic fees
+      type: mongoose.Types.ObjectId,
+      required: function() {
+        return this.isAcademic;
+      },
+      ref: "Course"
+    },
+    year: {
+      // null in case of non-academic fees
+      type: String,
+      required: function() {
+        return this.isAcademic;
+      },
     },
     feeItem: {
       type: mongoose.Types.ObjectId,
@@ -30,12 +39,20 @@ const schema = new mongoose.Schema(
       type: Date,
       required: true
     },
-    maxDueDate: {
-      type: Date,
+    isAcademic: {
+      // whether fee is course specific, true if yes => course & year will be mandatory
+      type: Boolean,
+      required: true
+    },
+    isOptional: {
+      // whether fee is optional or mandatory to all associated students
+      type: Boolean,
       required: true
     }
   },
   { timestamps: true }
 );
+
+schema.index({ fsSession: 1, fsCategory: 1 });
 
 module.exports = mongoose.model("FeeStructure", schema);
