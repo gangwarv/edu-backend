@@ -25,6 +25,8 @@ yarn-error.log*
 *.zip
 *.rar
 import-data.js
+.serverless
+serverless.yml
 
 #openode
 .openode
