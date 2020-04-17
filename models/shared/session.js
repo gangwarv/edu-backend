@@ -5,11 +5,19 @@ const schema = new mongoose.Schema(
     _id: String,
     name: {
       type: String,
-      required: true
+      required: true,
     },
-    allTasks: [String],
-    pendingTasks: [String],
-    runningTasks: [String]
+    tasks: [
+      {
+        task: { type: String, required: true },
+        status: {
+          type: String,
+          enum: ["pending", "running", "completed"],
+          default: "pending",
+        },
+        lastUpdated: Date
+      },
+    ],
   },
   { timestamps: true }
 );

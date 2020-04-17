@@ -25,6 +25,7 @@ const schema = new mongoose.Schema(
     },
     gender: {
       type: String,
+      enum:['MALE','FEMALE','OTHER'],
       required: true
     },
     dateOfBirth: {
@@ -34,8 +35,7 @@ const schema = new mongoose.Schema(
     mobile: mobile,
     email: {
       type: String,
-      lowercase: true,
-      required: true
+      lowercase: true
     },
     course: {
       type: mongoose.Types.ObjectId,

@@ -38,4 +38,4 @@ const schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("StudentRecord", schema);
+module.exports = mongoose.model("StudentSession", schema);

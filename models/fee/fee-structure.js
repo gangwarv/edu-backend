@@ -14,7 +14,7 @@ const schema = new mongoose.Schema(
       // null in case of non-academic fees
       type: mongoose.Types.ObjectId,
       required: function() {
-        return this.isAcademic;
+        return this.feeType === 'academic' || this.feeType === 'registration';
       },
       ref: "Course"
     },
@@ -22,7 +22,7 @@ const schema = new mongoose.Schema(
       // null in case of non-academic fees
       type: String,
       required: function() {
-        return this.isAcademic;
+        return this.feeType === 'academic';
       },
     },
     feeItem: {
@@ -39,9 +39,11 @@ const schema = new mongoose.Schema(
       type: Date,
       required: true
     },
-    isAcademic: {
-      // whether fee is course specific, true if yes => course & year will be mandatory
-      type: Boolean,
+    feeType: {
+      // academic: course specific, non-academic: common for all courses & year, 
+      // registration: course registration fee before admission
+      type: String,
+      enum:['academic','non-academic','registration'],
       required: true
     },
     isOptional: {
