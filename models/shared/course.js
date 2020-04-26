@@ -17,6 +17,7 @@ const schema = new mongoose.Schema({
     },
     type: {
         type: String,
+        enum:['UG','PG'],
         required: true,
         default: "UG"
     },
@@ -24,16 +25,20 @@ const schema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    activeForAdmission: Boolean,
+    activeForAdmission: {
+        type: Boolean,
+        default: false
+    },
     isLateral: {
         type: Boolean,
         default: false
     },
     duration: {
         type: String,
-        required: true,
-        default: '6-S' // or '6-s'
+        required: true
     }
 }, { timestamps: true });
+
+// schema.index({ name: 1 }, { unique: true }); not required
 
 module.exports = mongoose.model('Course', schema);

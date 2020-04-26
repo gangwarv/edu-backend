@@ -1,13 +1,13 @@
-const AcademicDepartment = require('../../models/shared/academicdepartment');
+const Department = require('../../models/shared/department');
 const Course = require('../../models/shared/course');
 
-const addAcDept = async ({ dept: { id, name, isActive } }, req) => {
+const addDepartment = async ({ dept: { id, name, isActive } }, req) => {
     req.passed('course-create');
     let newDept;
     if (id)
-        newDept = await AcademicDepartment.findByIdAndUpdate(id, { name, isActive }, { new: true });
+        newDept = await Department.findByIdAndUpdate(id, { name, isActive }, { new: true });
     else
-        newDept = await AcademicDepartment.create({
+        newDept = await Department.create({
             name,
             isActive: true,
             courses: []
@@ -18,10 +18,10 @@ const addAcDept = async ({ dept: { id, name, isActive } }, req) => {
     return newDept;
 }
 
-const toggleAcDept = async ({ id }, req) => {
+const toggleDepartment = async ({ id }, req) => {
     req.roles.passed('course-create');
     try {
-        let dept = await AcademicDepartment.findById(id);
+        let dept = await Department.findById(id);
         dept.isActive = !dept.isActive;
         dept = await dept.save();
 
@@ -34,7 +34,7 @@ const toggleAcDept = async ({ id }, req) => {
         throw err;
     }
 }
-const deleteAcDept = async ({ id }, req) => {
+const deleteDepartment = async ({ id }, req) => {
     req.passed('course-delete');
 
     const courseCount = await Course.countDocuments({ department: id });
@@ -42,30 +42,30 @@ const deleteAcDept = async ({ id }, req) => {
     if (courseCount > 0) {
         throw new Error("Kindly detach all its associated entities first.")
     }
-    const deptCount = await AcademicDepartment.countDocuments({ _id: id });
+    const deptCount = await Department.countDocuments({ _id: id });
 
     if (deptCount === 0) {
         throw new Error("Academic Department does not exists!")
     }
-    return AcademicDepartment.findByIdAndDelete(id);
+    return Department.findByIdAndDelete(id);
 }
 
-const acDepts = (args) => {
+const departments = (args) => {
     const { isActive } = args;
     const filter = {};
     if (isActive !== undefined && isActive !== null) {
         filter['isActive'] = isActive
     }
-    return AcademicDepartment.find(filter);
+    return Department.find(filter);
 }
-const acDept = ({ id }) => {
-    return AcademicDepartment.findById(id);
+const department = ({ id }) => {
+    return Department.findById(id);
 }
 
 module.exports = {
-    acDepts,
-    acDept,
-    addAcDept,
-    toggleAcDept,
-    deleteAcDept
+    departments,
+    department,
+    addDepartment,
+    toggleDepartment,
+    deleteDepartment
 }

@@ -12,4 +12,4 @@ const schema = new mongoose.Schema({
     }],
 },{timestamps: true});
 
-module.exports = mongoose.model('AcademicDepartment', schema);
+module.exports = mongoose.model('Department', schema);

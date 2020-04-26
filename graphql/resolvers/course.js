@@ -1,9 +1,9 @@
 const Course = require('../../models/shared/course');
-const AcademicDepartment = require('../../models/shared/academicdepartment');
+const Department = require('../../models/shared/department');
 
 addCourse = async ({ course }, req) => {
     req.passed('course-create');
-    const dept = await AcademicDepartment.findById(course.department);
+    const dept = await Department.findById(course.department);
     const newCourse = {
         ...course,
         departmentName: dept._doc.name
@@ -27,7 +27,7 @@ toggleCourse = async ({ id }) => {
     req.passed('course-create');
     try {
         const course = await Course.findById(id)
-        const dept = await AcademicDepartment.findById(course.department);
+        const dept = await Department.findById(course.department);
 
         if (!course.isActive && !dept.isActive) {
             throw new Error("Please activate department first before activating it's courses.")

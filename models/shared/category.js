@@ -12,4 +12,6 @@ const schema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+schema.index({ name: 1 }, { unique: true });
+
 module.exports = mongoose.model('Category', schema);

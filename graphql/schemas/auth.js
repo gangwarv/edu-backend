@@ -40,6 +40,7 @@ module.exports = [
         role: String!
         roleName: String!
         privileges: String!
+        updatedAt: String
     }
     input UserInput {
         id: String

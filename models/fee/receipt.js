@@ -35,6 +35,7 @@ const payment = new mongoose.Schema({
 
 const schema = new mongoose.Schema(
   {
+    _id: String,
     session: {
       type: String,
       required: true
@@ -82,5 +83,6 @@ const schema = new mongoose.Schema(
 );
 
 schema.index({ session: -1, type: -1 });
+schema.index({ bill: 1 });
 
 module.exports = mongoose.model("Bill", schema);

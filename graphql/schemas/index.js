@@ -1,7 +1,7 @@
 const { buildSchema } = require('graphql')
 const AuthSchema = require('./auth')
 const CategorySchema = require('./category')
-const AcDeptSchema = require('./academic-department')
+const AcDeptSchema = require('./department')
 const CourseSchema = require('./course')
 
 const FeeSchema = require('./fee-schema')
