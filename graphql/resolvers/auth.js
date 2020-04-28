@@ -5,13 +5,13 @@ const AppModule = require("../../models/app-management/appmodule");
 const { TOKEN_EXPIRY } = require("../../keys");
 const maxLoginAttempts = 50;
 const menusData = [
-//   {
-//     text: "Hello",
-//     path: "/hello",
-//     module: "Home",
-//     privilege: null,
-//     position: "left",
-//   },
+  //   {
+  //     text: "Hello",
+  //     path: "/hello",
+  //     module: "Home",
+  //     privilege: null,
+  //     position: "left",
+  //   },
   {
     text: "Departments",
     path: "/acdepts",
@@ -105,13 +105,14 @@ const login = async ({ userName, password }, req) => {
       data.privileges.includes("admin")
   );
   return {
-    ...data,
-    token,
     menus,
-    validFrom: new Date().getTime(),
-    expiresIn: new Date(
-      new Date().getTime() + (TOKEN_EXPIRY - 1) * 1000
-    ).getTime(),
+    data: {
+      ...data,
+      token,
+      expiresIn: new Date(
+        new Date().getTime() + (TOKEN_EXPIRY - 1) * 1000
+      ).getTime(),
+    },
   };
 };
 
