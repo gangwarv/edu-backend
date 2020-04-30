@@ -1,79 +1,108 @@
-const Course = require('../../models/shared/course');
-const Department = require('../../models/shared/department');
+const Course = require("../../models/shared/course");
+const Department = require("../../models/shared/department");
 
-addCourse = async ({ course }, req) => {
-    req.passed('course-create');
-    const dept = await Department.findById(course.department);
-    const newCourse = {
-        ...course,
-        departmentName: dept._doc.name
-    }
-    var createdCourse = null;
+const { generateNext } = require("../../helpers/sequence");
 
-    const id = newCourse.id;
-    if (id)
-        createdCourse = await Course.findByIdAndUpdate({ _id: id }, newCourse, { new: true });
-    else
-        createdCourse = await Course.create(newCourse);
+const addCourse = async ({ course }, req) => {
+  req.passed("course-create");
+  const dept = await Department.findById(course.department);
+  let newCourse = {
+    ...course,
+    departmentName: dept.name,
+  };
+  // generate code
+  if (!newCourse.code)
+    newCourse = { ...newCourse, code: await generateNext("course", 3, "C") };
+  //end
 
-    if (dept.courses.indexOf(createdCourse.id) === -1) {
-        dept.courses.push(createdCourse.id);
-        await dept.save();
-    }
+  var createdCourse = null;
 
-    return createdCourse;
-}
-toggleCourse = async ({ id }) => {
-    req.passed('course-create');
-    try {
-        const course = await Course.findById(id)
-        const dept = await Department.findById(course.department);
+  const id = newCourse.id;
+  if (id)
+    createdCourse = await Course.findByIdAndUpdate({ _id: id }, newCourse, {
+      new: true,
+    });
+  else {
+    createdCourse = await Course.create(newCourse);
+  }
 
-        if (!course.isActive && !dept.isActive) {
-            throw new Error("Please activate department first before activating it's courses.")
-        }
+  if (dept.courses.indexOf(createdCourse.id) === -1) {
+    dept.courses.push(createdCourse.id);
+    await dept.save();
+  }
 
-        course.isActive = !course.isActive;
+  return createdCourse;
+};
+// toggleCourse = async ({ id }) => {
+//   req.passed("course-create");
+//   try {
+//     const course = await Course.findById(id);
+//     const dept = await Department.findById(course.department);
 
-        return course.save();
-    }
-    catch (err) {
-        throw err;
-    }
-}
+//     if (!course.isActive && !dept.isActive) {
+//       throw new Error(
+//         "Please activate department first before activating it's courses."
+//       );
+//     }
 
-const courses = async ({ isActive, department }, req,res) => {
-    const filter = {};
+//     course.isActive = !course.isActive;
 
-    if (isActive !== undefined)
-        filter['isActive'] = isActive
-    if (department) {
-        filter['department'] = department;
-    }
+//     return course.save();
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 
-    return Course.find(filter);
-}
+const courses = async ({ isActive, department }, req, res) => {
+  const filter = {};
+
+  if (isActive !== undefined) filter["isActive"] = isActive;
+  if (department) {
+    filter["department"] = department;
+  }
+
+  return Course.find(filter);
+};
 
 const course = ({ id }, req) => {
-    return Course.findById(id);
-}
+  return Course.findById(id);
+};
 
 const deleteCourse = async ({ id }, req) => {
-    req.passed('course-delete');
-    const count = await Course.countDocuments({ _id: id });
+  req.passed("course-delete");
+  const count = await Course.countDocuments({ _id: id });
 
-    if (count === 0) {
-        throw new Error("Course does not exists!")
-    }
-    return Course.findByIdAndDelete(id);
-}
+  if (count === 0) {
+    throw new Error("Course does not exists!");
+  }
+  return Course.findByIdAndDelete(id);
+};
 
+const modifyCourses = async ({ ids, command, data }, req) => {
+  req.passed("course-create");
+  let change = {};
+  if (command === "activate" || command === "block")
+    change.isActive = command === "activate";
+  if (command === "open-admission" || command === "close-admission") {
+    change.admissionOpen = command === "open-admission";
+    change.admissionLastDate =
+      command === "open-admission"
+        ? data != null
+          ? new Date(data)
+          : new Date()
+        : null;
+  }
 
-module.exports =
-    {
-        addCourse,
-        toggleCourse,
-        deleteCourse,
-        courses,
-        course
-    }
+  await Course.updateMany({ _id: { $in: [...ids] } }, { $set: change });
+
+  return Course.find({ _id: { $in: ids } });
+};
+
+module.exports = {
+  addCourse,
+  //   toggleCourse,
+  deleteCourse,
+  courses,
+  course,
+  modifyCourses,
+};

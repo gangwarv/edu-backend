@@ -1,34 +1,39 @@
-const { buildSchema } = require('graphql')
-const AuthSchema = require('./auth')
-const CategorySchema = require('./category')
-const AcDeptSchema = require('./department')
-const CourseSchema = require('./course')
+const { buildSchema } = require("graphql");
+const AuthSchema = require("./auth");
+const CategorySchema = require("./category");
+const AcDeptSchema = require("./department");
+const CourseSchema = require("./course");
 
-const FeeSchema = require('./fee-schema')
+const SessionSchema = require("./session");
+
+const FeeSchema = require("./fee");
+
+const schemas = [
+  AuthSchema,
+  CategorySchema,
+  AcDeptSchema,
+  CourseSchema,
+  SessionSchema,
+  FeeSchema,
+].reduce(
+  (acc, schema) => {
+    return acc.map((ac, i) => (ac += "\n" + schema[i]));
+  },
+  ["", "", ""]
+);
+
+// console.log('schemas 1',schemas[0])
+// console.log('schemas 2',schemas[1])
+// console.log('schemas 3',schemas[2])
 
 module.exports = buildSchema(`
-${AuthSchema[0]}
-${CategorySchema[0]}
-${AcDeptSchema[0]}
-${CourseSchema[0]}
-${FeeSchema[0]}
- 
+${schemas[0]}
 
 type Query {
-    ${AuthSchema[1]}
-    ${CategorySchema[1]}
-    ${AcDeptSchema[1]}
-    ${CourseSchema[1]}
-    ${FeeSchema[1]}
-
-  
+    ${schemas[1]}
 }
 
 type Mutation {
-    ${AuthSchema[2]}
-    ${CategorySchema[2]}
-    ${AcDeptSchema[2]}
-    ${CourseSchema[2]}
-    ${FeeSchema[2]}
+    ${schemas[2]}
 }
 `);

@@ -6,7 +6,8 @@ module.exports = [
         type: String!
         name: String!
         isActive: Boolean!
-        isLateral: Boolean!
+        admissionOpen: Boolean
+        admissionLastDate: String
         departmentName: String!
         department: String!
         activeForAdmission: Boolean
@@ -21,7 +22,6 @@ module.exports = [
         name: String!
         department: String!
         duration: String!
-        isLateral: Boolean
         isActive: Boolean
     }
     `,
@@ -32,6 +32,6 @@ module.exports = [
     `
     addCourse(course: CourseInput!): Course!
     deleteCourse(id: String!): Course!
-    toggleCourse(id: String!): Course!
+    modifyCourses(ids: [String!]!, command: String!, data: String): [Course!]!
     `
 ]

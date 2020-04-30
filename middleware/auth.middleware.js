@@ -26,30 +26,20 @@ module.exports = function (req, res, next) {
     req.roles = "";
   }
   req.passed = passed.bind(req);
-  req.hasRole = hasRole.bind(req);
+  req.hasAny = hasAny.bind(req);
 
   console.warn("request", req.isAuth, req.userId, req.userName, req.roles);
   next();
 };
 
-function passed(roleName) {
-  if (!this.hasRole(roleName)) {
+function passed(roleNames) {
+  if (!this.hasAny(roleNames)) {
     throw new Error("access-denied");
   }
 }
-function hasRole(roleName = "") {
+function hasAny(roleNames = "") {
   return (
     this.isAuth &&
-    (this.roles.includes("admin") || this.roles.includes(roleName))
+    (this.roles.includes("admin") || roleNames.split(",").some((x) => this.roles.includes(x)) )
   );
 }
-// function hasAny(roleName = '') {
-//     return this.isAuth
-//         &&
-//         (
-//             this.roles.includes('admin')
-//             ||
-//             roleName.split(',').some(role => this.roles.includes(role))
-
-//         );
-// }

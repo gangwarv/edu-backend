@@ -5,9 +5,12 @@ const { mobile, address } = require("../shared/shared-schema");
 
 const schema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+    },
     session: {
       type: String,
-      required: true
+      required: true,
     },
     enrollmentNo: String,
     rollNo: String,
@@ -15,43 +18,43 @@ const schema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      required: true
+      required: true,
     },
     lastName: {
       type: String,
       lowercase: true,
       trim: true,
-      required: true
+      required: true,
     },
     gender: {
       type: String,
-      enum:['MALE','FEMALE','OTHER'],
-      required: true
+      enum: ["MALE", "FEMALE", "OTHER"],
+      required: true,
     },
     dateOfBirth: {
       type: Date,
-      required: true
+      required: true,
     },
     mobile: mobile,
     email: {
       type: String,
-      lowercase: true
+      lowercase: true,
     },
     course: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: "Course"
+      ref: "Course",
     },
     lateralEntry: {
-      type: Boolean
+      type: Boolean,
     },
     category: {
       type: mongoose.Types.ObjectId,
-      required: true
+      required: true,
     },
     categoryName: {
       type: String,
-      required: true
+      required: true,
     },
     paddress: address,
     caddress: address,
@@ -59,24 +62,24 @@ const schema = new mongoose.Schema(
       type: String,
       enum: ["INDIAN", "NRI"],
       required: true,
-      default: "INDIAN"
-    }
+      default: "INDIAN",
+    },
   },
   { timestamps: true }
 );
-schema.virtual("fullName").get(function() {
+schema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
-schema.virtual("city").get(function() {
+schema.virtual("city").get(function () {
   return this.paddress.city;
 });
-schema.virtual("cityName").get(function() {
+schema.virtual("cityName").get(function () {
   return this.paddress.city.name;
 });
-schema.virtual("state").get(function() {
+schema.virtual("state").get(function () {
   return this.paddress.state;
 });
-schema.virtual("stateName").get(function() {
+schema.virtual("stateName").get(function () {
   return this.paddress.city.stateName;
 });
 

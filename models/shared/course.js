@@ -25,9 +25,12 @@ const schema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    activeForAdmission: {
+    admissionOpen: {
         type: Boolean,
         default: false
+    },
+    admissionLastDate: {
+        type: Date
     },
     isLateral: {
         type: Boolean,

@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
     enrollmentNo: String,
     rollNo: String,
     student: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
       ref: "Student"
     },

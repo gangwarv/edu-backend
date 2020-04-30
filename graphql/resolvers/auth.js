@@ -5,13 +5,6 @@ const AppModule = require("../../models/app-management/appmodule");
 const { TOKEN_EXPIRY } = require("../../keys");
 const maxLoginAttempts = 50;
 const menusData = [
-  //   {
-  //     text: "Hello",
-  //     path: "/hello",
-  //     module: "Home",
-  //     privilege: null,
-  //     position: "left",
-  //   },
   {
     text: "Departments",
     path: "/acdepts",
@@ -30,6 +23,13 @@ const menusData = [
     text: "Categories",
     path: "/categories",
     privilege: "category-view",
+    module: "EDP",
+    position: "left",
+  },
+  {
+    text: "Session Manager",
+    path: "/sessions",
+    privilege: "course-view",
     module: "EDP",
     position: "left",
   },
@@ -60,6 +60,13 @@ const menusData = [
     module: "My Account",
     privilege: null,
     position: "top",
+  },
+  {
+    text: "Fee Items",
+    path: "/sessions",
+    privilege: "course-view",
+    module: "Fee Management",
+    position: "left",
   },
 ];
 
