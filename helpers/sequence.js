@@ -1,11 +1,14 @@
 const Sequence = require("../models/shared/sequence");
-
+const prefixIds = {
+    feeItem:"FI",
+    feeType:"FT",
+    course:"C"
+}
 // collectionName: unique identifier for sequence,
 // length: no of character in Id
 module.exports.generateNext = async function (
   collectionName,
-  length,
-  prefix = ""
+  length
 ) {
   let count = await Sequence.countDocuments({ _id: collectionName });
 
@@ -27,7 +30,7 @@ module.exports.generateNext = async function (
   ).then((doc) => {
     if (length) {
       let no = `0000000000${doc.sequence_value}`;
-      return prefix + no.substr(no.length - length);
+      return (prefixIds[collectionName]||'') + no.substr(no.length - length);
     }
     return doc.sequence_value;
   });

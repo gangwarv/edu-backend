@@ -62,8 +62,15 @@ const menusData = [
     position: "top",
   },
   {
+    text: "Fee Groups",
+    path: "/feetypes",
+    privilege: "course-view",
+    module: "Fee Management",
+    position: "left",
+  },
+  {
     text: "Fee Items",
-    path: "/sessions",
+    path: "/feeitems",
     privilege: "course-view",
     module: "Fee Management",
     position: "left",

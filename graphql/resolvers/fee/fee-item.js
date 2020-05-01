@@ -2,7 +2,7 @@ const FeeItem = require("../../../models/fee/fee-item");
 const FeeType = require("../../../models/fee/fee-type");
 const { generateNext } = require("../../../helpers/sequence");
 
-const feeItems = (args) => {
+const feeItems = async (args) => {
   return FeeItem.find();
 };
 
@@ -11,9 +11,11 @@ const feeItem = ({ id }) => {
 };
 
 const addFeeItem = async ({ id, name, type, isActive }, req) => {
-  req.passed("fee-item-crud");
+  req.passed("fee-structure-crud");
   let newDoc;
-  let typeName = (await FeeType.findById(type)).name;
+  const feetype = await FeeType.findById(type);
+  
+  let typeName = feetype.name;
   if (id)
     newDoc = await FeeItem.findByIdAndUpdate(
       id,
@@ -21,15 +23,16 @@ const addFeeItem = async ({ id, name, type, isActive }, req) => {
       { new: true }
     );
   else {
-    id = await generateNext("feeitem", 3, "FI");
+
+    id = await generateNext("feeItem", 3);
     newDoc = await FeeItem.create({
       _id: id,
       name,
       type,
       typeName,
       isActive,
-    }).catch(async err=>{
-      await generateNext("feeitem");
+    }).catch(async (err) => {
+      await generateNext("feeItem");
       return err;
     });
   }
@@ -38,7 +41,7 @@ const addFeeItem = async ({ id, name, type, isActive }, req) => {
 };
 
 const deleteFeeItem = async ({ id }, req) => {
-  req.passed("fee-item-crud");
+  req.passed("fee-structure-crud");
 
   const count = await FeeItem.countDocuments({ _id: id });
 
@@ -50,22 +53,25 @@ const deleteFeeItem = async ({ id }, req) => {
 
 /// FeeType
 
-const feeTypes = (args) => {
-  return FeeItem.find();
+const feeTypes = () => {
+  return FeeType.find();
 };
 
 const addFeeType = async ({ id, name }, req) => {
-  req.passed("fee-item-create");
+  req.passed("fee-structure-crud");
   let newDoc;
-  if (id) newDoc = await FeeType.findByIdAndUpdate(id, { name }, { new: true });
-  else {
-    id = await generateNext("feetype", 2, "FT");
+  if (id) {
+    newDoc = await FeeType.findByIdAndUpdate(id, { name }, { new: true });
+    // update relation
+    await FeeItem.updateMany({ type: id }, { typeName: name });
+  } else {
+    id = await generateNext("feeType", 2);
 
     newDoc = await FeeType.create({
       _id: id,
       name,
-    }).catch(async err=>{
-      await generateNext("feetype");
+    }).catch(async (err) => {
+      await generateNext("feeType");
       return err;
     });
   }
@@ -73,7 +79,7 @@ const addFeeType = async ({ id, name }, req) => {
 };
 
 const deleteFeeType = async ({ id }, req) => {
-  req.passed("fee-item-delete");
+  req.passed("fee-structure-crud");
 
   const count = await FeeType.countDocuments({ _id: id });
 

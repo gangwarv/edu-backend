@@ -22,10 +22,11 @@ app.use(['/', '/*'], function(req, res, next) {
   res.sendFile(path.join(__dirname, './public', 'index.html'));
  });
 
-// 'mongodb+srv://vishal:vishal@studentcluster-k7i07.mongodb.net/eduerp?retryWrites=true&w=majority'
 mongoose.connect(MONGODB_URL, {
-  useNewUrlParser: true
-  //useCreateIndex:true
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex:true,
+  useUnifiedTopology: true
 })
 .then(_=>console.log('mongo connected'))
 .catch(_=>console.log(_));
