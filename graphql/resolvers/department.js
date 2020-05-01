@@ -1,28 +1,18 @@
 const Department = require("../../models/shared/department");
 const Course = require("../../models/shared/course");
+const { generateNext } = require("../../helpers/sequence");
 
 const addDepartment = async ({ dept: { id, name, isActive } }, req) => {
   req.passed("course-create");
-  let newDept;
-  if (id)
-    newDept = await Department.findByIdAndUpdate(
-      id,
-      { name, isActive },
-      { new: true }
-    );
-  else
-    newDept = await Department.create({
-      name,
-      isActive: true,
-      courses: [],
-    });
-
-  await Course.updateMany(
-    { department: newDept.id },
-    { departmentName: newDept.name }
+  if (!id) id = await generateNext("course", 3);
+  const doc = await Department.findByIdAndUpdate(
+    id,
+    { name, isActive },
+    { new: true, upsert: true }
   );
+  await Course.updateMany({ department: id }, { departmentName: name });
 
-  return newDept;
+  return doc;
 };
 
 const toggleDepartment = async ({ id }, req) => {

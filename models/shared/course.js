@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
+    _id: String,
     code: {
         type: String,
         required: true,
@@ -12,8 +13,9 @@ const schema = new mongoose.Schema({
     },
     departmentName: String,
     department: {
-        type: mongoose.Types.ObjectId,
-        ref: "AcademicDepartment"
+        type: String,
+        ref: "AcademicDepartment",
+        required:true,
     },
     type: {
         type: String,
@@ -42,6 +44,6 @@ const schema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// schema.index({ name: 1 }, { unique: true }); not required
+schema.index({ name: 1 }, { unique: true }); 
 
 module.exports = mongoose.model('Course', schema);

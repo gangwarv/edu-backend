@@ -6,52 +6,23 @@ const { generateNext } = require("../../helpers/sequence");
 const addCourse = async ({ course }, req) => {
   req.passed("course-create");
   const dept = await Department.findById(course.department);
-  let newCourse = {
-    ...course,
-    departmentName: dept.name,
-  };
-  // generate code
-  if (!newCourse.code)
-    newCourse = { ...newCourse, code: await generateNext("course", 3, "C") };
+
+  const newCourse = { ...course, departmentName: dept.name };
+  course.departmentName = dept.name;
+  // generate code,id
+  if (!course.code) newCourse.code = await generateNext("courseCode", 3);
+  if (!course.id) newCourse.id = await generateNext("course", 3);
   //end
-
-  var createdCourse = null;
-
-  const id = newCourse.id;
-  if (id)
-    createdCourse = await Course.findByIdAndUpdate({ _id: id }, newCourse, {
-      new: true,
+  return Course.findByIdAndUpdate(newCourse.id, newCourse, {
+    new: true, upsert:true
+  }).catch(async err=>
+    {
+      // reset code,id to previous only if generated
+      if (!course.code) await generateNext("courseCode");
+      if (!course.id) await generateNext("course");
+      return err;
     });
-  else {
-    createdCourse = await Course.create(newCourse);
-  }
-
-  if (dept.courses.indexOf(createdCourse.id) === -1) {
-    dept.courses.push(createdCourse.id);
-    await dept.save();
-  }
-
-  return createdCourse;
 };
-// toggleCourse = async ({ id }) => {
-//   req.passed("course-create");
-//   try {
-//     const course = await Course.findById(id);
-//     const dept = await Department.findById(course.department);
-
-//     if (!course.isActive && !dept.isActive) {
-//       throw new Error(
-//         "Please activate department first before activating it's courses."
-//       );
-//     }
-
-//     course.isActive = !course.isActive;
-
-//     return course.save();
-//   } catch (err) {
-//     throw err;
-//   }
-// };
 
 const courses = async ({ isActive, department }, req, res) => {
   const filter = {};

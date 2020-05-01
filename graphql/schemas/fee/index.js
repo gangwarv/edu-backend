@@ -1,13 +1,9 @@
-const FeeItemSchema = require('./fee-item')
+const FeeItemSchema = require("./fee-item");
+const FeeStructureSchema = require("./fee-structure");
 
-module.exports = [
-    `
-    ${FeeItemSchema[0]}
-    `,
-    `
-    ${FeeItemSchema[1]}
-    `,
-    `
-    ${FeeItemSchema[2]}
-    `
-]
+module.exports = [FeeItemSchema, FeeStructureSchema].reduce(
+  (acc, schema) => {
+    return acc.map((ac, i) => (ac += "\n" + schema[i]));
+  },
+  ["", "", ""]
+);

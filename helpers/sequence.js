@@ -2,7 +2,10 @@ const Sequence = require("../models/shared/sequence");
 const prefixIds = {
     feeItem:"FI",
     feeType:"FT",
-    course:"C"
+    course:"C",
+    courseCode:"P",
+    department:"D",
+    category:"CAT"
 }
 // collectionName: unique identifier for sequence,
 // length: no of character in Id

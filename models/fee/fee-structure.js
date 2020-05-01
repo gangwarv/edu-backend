@@ -12,21 +12,21 @@ const schema = new mongoose.Schema(
     },
     course: {
       // null in case of non-academic fees
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: function() {
         return this.feeType === 'academic' || this.feeType === 'registration';
       },
       ref: "Course"
     },
     year: {
-      // null in case of non-academic fees
+      // null in case of non-academic fees 
       type: String,
       required: function() {
         return this.feeType === 'academic';
       },
     },
     feeItem: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       ref: "FeeItem",
       required: true
     },
