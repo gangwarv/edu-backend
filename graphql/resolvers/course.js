@@ -51,6 +51,7 @@ const deleteCourse = async ({ id }, req) => {
 
 const modifyCourses = async ({ ids, command, data }, req) => {
   req.passed("course-create");
+  console.log(data,new Date(data))
   let change = {};
   if (command === "activate" || command === "block")
     change.isActive = command === "activate";
@@ -58,10 +59,9 @@ const modifyCourses = async ({ ids, command, data }, req) => {
     change.admissionOpen = command === "open-admission";
     change.admissionLastDate =
       command === "open-admission"
-        ? data != null
-          ? new Date(data)
-          : new Date()
+        ? new Date(data)
         : null;
+        console.log(data,change) 
   }
 
   await Course.updateMany({ _id: { $in: [...ids] } }, { $set: change });

@@ -7,13 +7,13 @@ module.exports = [
         name: String!
         isActive: Boolean!
         admissionOpen: Boolean
-        admissionLastDate: String
+        admissionLastDate: ISODate
         departmentName: String!
         department: String!
         activeForAdmission: Boolean
         duration: String!
         createdAt: String!
-        updatedAt: String!
+        updatedAt: ISODate!
     }
     input CourseInput {
         id: String

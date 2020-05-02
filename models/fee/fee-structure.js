@@ -14,10 +14,11 @@ const schema = new mongoose.Schema(
       // null in case of non-academic fees
       type: String,
       required: function() {
-        return this.feeType === 'academic' || this.feeType === 'registration';
+        return this.feeType === 'academic' || this.feeType === 'onetime';
       },
       ref: "Course"
     },
+    label: String, // semester wise indication
     year: {
       // null in case of non-academic fees 
       type: String,
@@ -40,10 +41,11 @@ const schema = new mongoose.Schema(
       required: true
     },
     feeType: {
-      // academic: course specific, non-academic: common for all courses & year, 
-      // registration: course registration fee before admission
+      // academic: course specific, 
+      // non-academic: common for all courses & year, 
+      // onetime: course registration/admission fee before admission, recipient is not a student yet
       type: String,
-      enum:['academic','non-academic','registration'],
+      enum:['academic','onetime','non-academic'],
       required: true
     },
     isOptional: {

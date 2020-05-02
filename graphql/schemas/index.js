@@ -27,6 +27,7 @@ const schemas = [
 // console.log('schemas 3',schemas[2])
 
 module.exports = buildSchema(`
+scalar ISODate
 ${schemas[0]}
 
 type Query {

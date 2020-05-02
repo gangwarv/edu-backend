@@ -11,12 +11,13 @@ module.exports = [
         fsCategory: String!
         courseName: String
         year: String
+        label: String
         feeItemName: String!
-        feeType: String!
         feeAmount: Float!
         dueDate: String
         feeType: String!
-        isOptional: Boolean!  
+        isOptional: Boolean!
+
     }
 
     `,
