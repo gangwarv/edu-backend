@@ -8,9 +8,10 @@ module.exports = function (req, res, next) {
 
   try {
     if (!token) {
-      // temp
+      // temporary for graphiql interface only
       req.isAuth = true;
-      req.roles = "admin";
+      req.userName = 'no_user';
+      req.roles = ["admin"];
     } else {
       const { userId, privileges, userName, ...rest } = jwt.verify(
         token,

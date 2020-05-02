@@ -4,55 +4,60 @@ const schema = new mongoose.Schema(
   {
     fsSession: {
       type: String,
-      required: true
+      required: true,
     },
     fsCategory: {
       type: String,
-      required: true
+      required: true,
     },
     course: {
       // null in case of non-academic fees
       type: String,
-      required: function() {
-        return this.feeType === 'academic' || this.feeType === 'onetime';
+      required: function () {
+        return this.feeType === "academic" || this.feeType === "onetime";
       },
-      ref: "Course"
+      ref: "Course",
     },
-    label: String, // semester wise indication
-    year: {
-      // null in case of non-academic fees 
+    oddEven: {
+      // semester wise indication
       type: String,
-      required: function() {
-        return this.feeType === 'academic';
+      required: true,
+      default: "",
+    },
+    year: {
+      // null in case of non-academic fees
+      type: String,
+      required: function () {
+        return this.feeType === "academic";
       },
     },
     feeItem: {
       type: String,
       ref: "FeeItem",
-      required: true
+      required: true,
     },
     feeAmount: {
       type: Number,
       min: 0,
-      required: true
+      required: true,
     },
     dueDate: {
       type: Date,
-      required: true
+      required: true,
     },
     feeType: {
-      // academic: course specific, 
-      // non-academic: common for all courses & year, 
+      // academic: course specific,
+      // non-academic: common for all courses & year,
       // onetime: course registration/admission fee before admission, recipient is not a student yet
       type: String,
-      enum:['academic','onetime','non-academic'],
-      required: true
+      enum: ["academic", "onetime", "non-academic"],
+      required: true,
     },
     isOptional: {
       // whether fee is optional or mandatory to all associated students
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   { timestamps: true }
 );

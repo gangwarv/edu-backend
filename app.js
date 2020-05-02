@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+require("./services/mongo-patch");
 var express = require("express");
 var path = require("path");
 var cors = require("cors");
