@@ -1,6 +1,6 @@
 module.exports = [
     `
-    type FeeType {
+    type FeeGroup {
         id: ID!
         name: String!
     }
@@ -8,22 +8,22 @@ module.exports = [
     type FeeItem {
         id: ID!
         name: String!
-        type: String!
-        typeName: String!
+        group: String!
+        groupName: String!
         isActive: Boolean!
     }
     `,
     `
-    feeTypes(isActive: Boolean): [FeeType!]!
+    feeGroups(isActive: Boolean): [FeeGroup!]!
 
     feeItems(isActive: Boolean): [FeeItem!]!
     feeItem(id: String!): FeeItem!
     `,
     `
-    addFeeType(id: String, name: String!): FeeType!
-    deleteFeeType(id: String!): FeeType!
+    addFeeGroup(id: String, name: String!): FeeGroup!
+    deleteFeeGroup(id: String!): FeeGroup!
 
-    addFeeItem(id: String, name: String!, isActive: Boolean!, type: String!): FeeItem!
+    addFeeItem(id: String, name: String!, isActive: Boolean!, group: String!): FeeItem!
     deleteFeeItem(id: String!): FeeItem!
     `
 ]

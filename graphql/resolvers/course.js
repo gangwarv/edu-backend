@@ -14,14 +14,15 @@ const addCourse = async ({ course }, req) => {
   if (!course.id) newCourse.id = await generateNext("course", 3);
   //end
   return Course.findByIdAndUpdate(newCourse.id, newCourse, {
-    new: true, upsert:true
-  }).catch(async err=>
-    {
-      // reset code,id to previous only if generated
-      if (!course.code) await generateNext("courseCode");
-      if (!course.id) await generateNext("course");
-      return err;
-    });
+    new: true,
+    upsert: true,
+    setDefaultsOnInsert: true,
+  }).catch(async (err) => {
+    // reset code,id to previous only if generated
+    if (!course.code) await generateNext("courseCode");
+    if (!course.id) await generateNext("course");
+    return err;
+  });
 };
 
 const courses = async ({ isActive, department }, req, res) => {
@@ -51,17 +52,13 @@ const deleteCourse = async ({ id }, req) => {
 
 const modifyCourses = async ({ ids, command, data }, req) => {
   req.passed("course-create");
-  console.log(data,new Date(data))
   let change = {};
   if (command === "activate" || command === "block")
     change.isActive = command === "activate";
   if (command === "open-admission" || command === "close-admission") {
     change.admissionOpen = command === "open-admission";
     change.admissionLastDate =
-      command === "open-admission"
-        ? new Date(data)
-        : null;
-        console.log(data,change) 
+      command === "open-admission" ? new Date(data) : null;
   }
 
   await Course.updateMany({ _id: { $in: [...ids] } }, { $set: change });

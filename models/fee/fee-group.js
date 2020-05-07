@@ -10,4 +10,4 @@ const schema = new mongoose.Schema({
 
 schema.index({ name: 1 }, { unique: true });
 
-module.exports = mongoose.model('FeeType', schema);
+module.exports = mongoose.model('FeeGroup', schema);

@@ -63,7 +63,7 @@ const menusData = [
   },
   {
     text: "Fee Groups",
-    path: "/feetypes",
+    path: "/feegroups",
     privilege: "course-view",
     module: "Fee Management",
     position: "left",
@@ -71,6 +71,13 @@ const menusData = [
   {
     text: "Fee Items",
     path: "/feeitems",
+    privilege: "course-view",
+    module: "Fee Management",
+    position: "left",
+  },
+  {
+    text: "Fee Structure",
+    path: "/feestructures",
     privilege: "course-view",
     module: "Fee Management",
     position: "left",

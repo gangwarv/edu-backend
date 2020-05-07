@@ -22,10 +22,6 @@ const schemas = [
   ["", "", ""]
 );
 
-// console.log('schemas 1',schemas[0])
-// console.log('schemas 2',schemas[1])
-// console.log('schemas 3',schemas[2])
-
 module.exports = buildSchema(`
 scalar ISODate
 ${schemas[0]}

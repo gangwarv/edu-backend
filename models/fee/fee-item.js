@@ -6,12 +6,12 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    type: {
+    group: {
         type: String,
-        ref:"FeeType",
+        ref:"FeeGroup",
         required: true
     },
-    typeName: {
+    groupName: {
         type: String,
         required: true
     },

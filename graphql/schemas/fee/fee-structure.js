@@ -1,23 +1,30 @@
 module.exports = [
-    `
+  `
     type FeeCategory {
         id: ID!
         name: String!
     }
-
+    type CourseFeeStructure {
+        id: ID!
+        fsSession: String!
+        fsCategory: String!
+        course: String
+        courseName: String
+    }
     type FeeStructure {
         id: ID!
         fsSession: String!
         fsCategory: String!
+        course: String
         courseName: String
         year: String
         oddEven: String
+        feeItem: String!
         feeItemName: String!
         feeAmount: Float!
         dueDate: String
         feeType: String!
         isOptional: Boolean!
-
     }
     input FeeStructureInput {
         id: ID
@@ -28,23 +35,25 @@ module.exports = [
         oddEven: String
         feeItem: String!
         feeAmount: Float!
-        dueDate: String
+        fromDate: ISODate
+        dueDate: ISODate
         feeType: String!
         isOptional: Boolean!
         isDeleted: Boolean
     }
 
     `,
-    `
+  `
     feeCategories: [FeeCategory!]!
-
-    feeStructures: [FeeStructure!]!
+    
+    feeStructures(fsSession: String!, fsCategory: String!): [CourseFeeStructure!]!
+    feeStructure(fsSession: String!, fsCategory: String, feeType: String, course: String): [FeeStructure!]!
 
     `,
-    `
-    addFeeCategory(id: String, name: String!): FeeCategory!
+  `
+    addFeeCategory(id: String!, name: String!): FeeCategory!
 
     addFeeStructure(fs: [FeeStructureInput!]!): [FeeStructure!]!
 
-    `
-]
+    `,
+];

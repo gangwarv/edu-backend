@@ -41,16 +41,20 @@ const schema = new mongoose.Schema(
       min: 0,
       required: true,
     },
+    fromDate: {
+      type: Date,
+      required: true,
+    },
     dueDate: {
       type: Date,
       required: true,
     },
     feeType: {
       // academic: course specific,
-      // non-academic: common for all courses & year,
-      // onetime: course registration/admission fee before admission, recipient is not a student yet
+      // non-academic: common for all courses, eg; hostel-mess, transport etc.
+      // other: registration/admission fee before admission, recipient is not a student yet
       type: String,
-      enum: ["academic", "onetime", "non-academic"],
+      enum: ["academic", "other", "non-academic"],
       required: true,
     },
     isOptional: {
