@@ -1,15 +1,24 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const schema = new mongoose.Schema({
+const schema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     state: {
-        type: mongoose.Types.ObjectId,
-        require: true,
-        ref: "State"
+      type: mongoose.Types.ObjectId,
+      require: true,
+      ref: "State"
     },
-}, { timestamps: true });
+    stateName: {
+      type: String,
+      required: true
+    }
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('City', schema);
+schema.index({ name: 1 }, { unique: true });
+
+module.exports = mongoose.model("City", schema);

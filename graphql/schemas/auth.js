@@ -4,11 +4,13 @@ module.exports = [
         userId: String!
         userName: String!
         token: String!
-        menus: [Menu!]!
-        validFrom: Float!
         expiresIn: Float!
         roleName: String!
         privileges: String!
+    }
+    type LoginData {
+        menus: [Menu!]!
+        data: AuthData!
     }
     type AppModule {
         id: ID!
@@ -40,6 +42,7 @@ module.exports = [
         role: String!
         roleName: String!
         privileges: String!
+        updatedAt: ISODate
     }
     input UserInput {
         id: String
@@ -63,7 +66,6 @@ module.exports = [
     }
     `,
     `
-    menus: [Menu!]!
 
     users: [User!]!
     user(id:String!): User!
@@ -72,7 +74,7 @@ module.exports = [
     appmodules: [AppModule!]!
     `,
    `
-    login(userName: String!, password: String!): AuthData!
+    login(userName: String!, password: String!): LoginData!
 
     addUser(user: UserInput): User!
 

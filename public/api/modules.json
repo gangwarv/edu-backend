@@ -1,33 +1,11 @@
 
 {
-    "modules": [
-        {
-            "name":"User Management",
-            "active": true,
-            "roles":[
-                "edp-create-user",
-                "edp-reset-pwd",
-                "edp-delete-user",
-                "edp-change-roles"
-            ]
-        },
-        {
-            "name":"Attendance",
-            "active": true,
-            "roles":[
-                "attd-add",
-                "attd-update",
-                "attd-view"
-            ]
-        },
-        {
-            "name":"Accounts",
-            "active": true,
-            "roles":[
-                "fee-submition",
-                "fee-view",
-                "fee-add"
-            ]
-        }
-    ]
+    "id":"BC0001",
+    "name":"vishal",
+    "course":"rev0vfeg839fhv03rfvuvdssfudvsu0ewr9",
+    "city":"vsfvf84rwefhf32rfwfjkfsdvdsvw",
+    "cityName":"Bareilly",
+    "state":"vsfvf84rwefhf32rfwfjkfsdvdsvw",
+    "stateName":"vsfvf84rwefhf32rfwfjkfsdvdsvw"
+
 }

@@ -1,14 +1,17 @@
 const AuthResolver = require('./auth');
 const CategoryResolver = require('./category');
-const AcademicDepartmentResolver = require('./academic-department');
+const DepartmentResolver = require('./department');
 const CourseResolver = require('./course');
-const FeeResolver = require('./fee-resolver');
+const SessionResolver = require('./session');
+
+const FeeResolver = require('./fee');
    
 module.exports = {
     ...AuthResolver,
     ...CategoryResolver,
-    ...AcademicDepartmentResolver,
+    ...DepartmentResolver,
     ...CourseResolver,
+    ...SessionResolver,
 
     ...FeeResolver
 }
