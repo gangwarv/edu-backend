@@ -1,5 +1,5 @@
 module.exports = [
-    `
+  `
     type Department {
         id: String
         name: String!
@@ -14,13 +14,12 @@ module.exports = [
         isActive: Boolean!
     }
     `,
-     `
+  `
     departments(isActive: Boolean): [Department!]!
     department(id: String!): Department!
     `,
-    `
-        addDepartment(dept: DepartmentInput): Department!
-        toggleDepartment(id: String!): Department!
-        deleteDepartment(id: String!): Department!
-    `
+  `
+    addDepartment(dept: DepartmentInput): Department!
+    deleteDepartment(id: String!): Department!
+    `,
 ];

@@ -22,7 +22,7 @@ const schemas = [
   ["", "", ""]
 );
 
-module.exports = buildSchema(`
+module.exports = (`
 scalar ISODate
 ${schemas[0]}
 

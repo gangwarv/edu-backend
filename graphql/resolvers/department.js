@@ -15,21 +15,21 @@ const addDepartment = async ({ dept: { id, name, isActive } }, req) => {
   return doc;
 };
 
-const toggleDepartment = async ({ id }, req) => {
-  req.roles.passed("course-create");
-  try {
-    let dept = await Department.findById(id);
-    dept.isActive = !dept.isActive;
-    dept = await dept.save();
+// const toggleDepartment = async ({ id }, req) => {
+//   req.roles.passed("course-create");
+//   try {
+//     let dept = await Department.findById(id);
+//     dept.isActive = !dept.isActive;
+//     dept = await dept.save();
 
-    if (!dept.isActive)
-      await Course.updateMany({ department: dept.id }, { isActive: false });
+//     if (!dept.isActive)
+//       await Course.updateMany({ department: dept.id }, { isActive: false });
 
-    return dept;
-  } catch (err) {
-    throw err;
-  }
-};
+//     return dept;
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 const deleteDepartment = async ({ id }, req) => {
   req.passed("course-delete");
 
@@ -62,6 +62,5 @@ module.exports = {
   departments,
   department,
   addDepartment,
-  toggleDepartment,
   deleteDepartment,
 };
