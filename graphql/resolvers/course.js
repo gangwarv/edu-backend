@@ -3,7 +3,7 @@ const Department = require("../../models/shared/department");
 
 const { generateNext } = require("../../helpers/sequence");
 
-const addCourse = async ({ course }, req) => {
+const addCourse = async (_, { course }, req) => {
   req.passed("course-create");
   const dept = await Department.findById(course.department);
 
@@ -25,7 +25,7 @@ const addCourse = async ({ course }, req) => {
   });
 };
 
-const courses = async ({ isActive, department }, req, res) => {
+const courses = async (_, { isActive, department }, req, res) => {
   const filter = {};
 
   if (isActive !== undefined) filter["isActive"] = isActive;
@@ -36,7 +36,7 @@ const courses = async ({ isActive, department }, req, res) => {
   return Course.find(filter);
 };
 
-const course = ({ id }, req) => {
+const course = (_, { id }, req) => {
   return Course.findById(id);
 };
 
@@ -50,7 +50,7 @@ const deleteCourse = async ({ id }, req) => {
   return Course.findByIdAndDelete(id);
 };
 
-const modifyCourses = async ({ ids, command, data }, req) => {
+const updateCourses = async (_, { ids, command, data }, req) => {
   req.passed("course-create");
   let change = {};
   if (command === "activate" || command === "block")
@@ -67,10 +67,14 @@ const modifyCourses = async ({ ids, command, data }, req) => {
 };
 
 module.exports = {
-  addCourse,
-  //   toggleCourse,
-  deleteCourse,
-  courses,
-  course,
-  modifyCourses,
+  Query: {
+    courses,
+    course,
+  },
+  Mutation: {
+    addCourse,
+    //   toggleCourse,
+    deleteCourse,
+    updateCourses,
+  },
 };

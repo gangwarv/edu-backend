@@ -94,7 +94,7 @@ function transformUser(userDoc) {
   };
 }
 
-const login = async ({ userName, password }, req) => {
+const login = async (_, { userName, password }, req) => {
   const userId = req.userId;
   const user = await User.findOne({
     $and: [
@@ -137,7 +137,7 @@ const login = async ({ userName, password }, req) => {
   };
 };
 
-const addUser = async ({ user }, req) => {
+const addUser = async (_, { user }, req) => {
   req.passed("user-create");
   // ommit pwd if empty
   if (!user.password) {
@@ -160,7 +160,7 @@ const addUser = async ({ user }, req) => {
   return transformUser(createdUser);
 };
 
-const addRole = async ({ id, name, privileges, isActive }, req) => {
+const addRole = async (_, { id, name, privileges, isActive }, req) => {
   req.passed("role-create");
   privileges = privileges.split(",").sort().toString();
 
@@ -185,7 +185,7 @@ const users = () => {
     .populate("role")
     .then((users) => users.map((u) => transformUser(u)));
 };
-const user = ({ id }) => {
+const user = (_, { id }) => {
   return User.findById(id)
     .populate("role")
     .map((u) => transformUser(u));
@@ -193,10 +193,10 @@ const user = ({ id }) => {
 const roles = () => {
   return Role.find();
 };
-const role = ({ id }) => {
+const role = (_, { id }) => {
   return Role.findById(id);
 };
-const deleteRole = async ({ id }, req) => {
+const deleteRole = async (_, { id }, req) => {
   req.passed("role-delete");
 
   const roleCount = await Role.countDocuments({ _id: id });
@@ -211,17 +211,21 @@ const deleteRole = async ({ id }, req) => {
   }
   throw new Error("Kindly detach all its associated entities first.");
 };
-const appmodules = () => {
-  return AppModule.find({ isActive: true });
-};
+
+// const appmodules = () => {
+//   return AppModule.find({ isActive: true });
+// };
 module.exports = {
-  appmodules,
-  roles,
-  role,
-  users,
-  user,
-  login,
-  addUser,
-  addRole,
-  deleteRole,
+  Query: {
+    roles,
+    role,
+    users,
+    user,
+  },
+  Mutation: {
+    login,
+    addUser,
+    addRole,
+    deleteRole,
+  },
 };

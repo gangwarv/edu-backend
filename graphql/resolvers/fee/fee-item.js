@@ -2,11 +2,11 @@ const FeeItem = require("../../../models/fee/fee-item");
 const FeeGroup = require("../../../models/fee/fee-group");
 const { generateNext } = require("../../../helpers/sequence");
 
-const feeItems = async (args) => {
+const feeItems = async (_, args) => {
   return FeeItem.find();
 };
 
-const feeItem = ({ id }) => {
+const feeItem = (_, { id }) => {
   return FeeItem.findById(id);
 };
 
@@ -30,7 +30,7 @@ const addFeeItem = async ({ id, name, group, isActive }, req) => {
   ).lean();
 };
 
-const deleteFeeItem = async ({ id }, req) => {
+const deleteFeeItem = async (_, { id }, req) => {
   req.passed("fee-structure-crud");
 
   const count = await FeeItem.countDocuments({ _id: id });
@@ -47,7 +47,7 @@ const feeGroups = () => {
   return FeeGroup.find();
 };
 
-const addFeeGroup = async ({ id, name }, req) => {
+const addFeeGroup = async (_, { id, name }, req) => {
   req.passed("fee-structure-crud");
   let newDoc;
   if (id) {
@@ -68,7 +68,7 @@ const addFeeGroup = async ({ id, name }, req) => {
   return newDoc;
 };
 
-const deleteFeeGroup = async ({ id }, req) => {
+const deleteFeeGroup = async (_, { id }, req) => {
   req.passed("fee-structure-crud");
 
   let count = await FeeGroup.countDocuments({ _id: id });
@@ -83,12 +83,17 @@ const deleteFeeGroup = async ({ id }, req) => {
 };
 
 module.exports = {
-  feeItems,
-  feeItem,
-  addFeeItem,
-  deleteFeeItem,
+  Query: {
+    feeItems,
+    feeItem,
+    
+    feeGroups,
+  },
+  Mutation: {
+    addFeeItem,
+    deleteFeeItem,
 
-  feeGroups,
-  addFeeGroup,
-  deleteFeeGroup,
+    addFeeGroup,
+    deleteFeeGroup,
+  },
 };

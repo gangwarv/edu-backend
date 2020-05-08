@@ -2,7 +2,7 @@ const Department = require("../../models/shared/department");
 const Course = require("../../models/shared/course");
 const { generateNext } = require("../../helpers/sequence");
 
-const addDepartment = async ({ dept: { id, name, isActive } }, req) => {
+const addDepartment = async (_, { dept: { id, name, isActive } }, req) => {
   req.passed("course-create");
   if (!id) id = await generateNext("course", 3);
   const doc = await Department.findByIdAndUpdate(
@@ -30,7 +30,7 @@ const addDepartment = async ({ dept: { id, name, isActive } }, req) => {
 //     throw err;
 //   }
 // };
-const deleteDepartment = async ({ id }, req) => {
+const deleteDepartment = async (_, { id }, req) => {
   req.passed("course-delete");
 
   const courseCount = await Course.countDocuments({ department: id });
@@ -46,7 +46,7 @@ const deleteDepartment = async ({ id }, req) => {
   return Department.findByIdAndDelete(id);
 };
 
-const departments = (args) => {
+const departments = (_, args) => {
   const { isActive } = args;
   const filter = {};
   if (isActive !== undefined && isActive !== null) {
@@ -59,8 +59,12 @@ const department = ({ id }) => {
 };
 
 module.exports = {
-  departments,
-  department,
-  addDepartment,
-  deleteDepartment,
+  Query: {
+    departments,
+    department,
+  },
+  Mutation: {
+    addDepartment,
+    deleteDepartment,
+  },
 };

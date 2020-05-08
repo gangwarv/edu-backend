@@ -1,7 +1,7 @@
 const Category = require("../../models/shared/category");
 const { generateNext } = require("../../helpers/sequence");
 
-const addCategory = async ({ id, name, isActive }, req) => {
+const addCategory = async (_, { id, name, isActive }, req) => {
   req.passed("category-create");
   if (!id) id = await generateNext("category", 1);
   return Category.findByIdAndUpdate(
@@ -11,7 +11,7 @@ const addCategory = async ({ id, name, isActive }, req) => {
   );
 };
 
-const deleteCategory = async ({ id }, req) => {
+const deleteCategory = async (_, { id }, req) => {
   req.passed("category-delete");
   // const courseCount = await Course.countDocuments({ department: id });
 
@@ -26,7 +26,7 @@ const deleteCategory = async ({ id }, req) => {
   return Category.findByIdAndDelete(id);
 };
 
-const categories = (args) => {
+const categories = (_, args) => {
   const { isActive } = args;
   const filter = {};
   if (isActive !== undefined && isActive !== null) {
@@ -39,8 +39,12 @@ const category = ({ id }) => {
 };
 
 module.exports = {
-  categories,
-  category,
-  addCategory,
-  deleteCategory,
+  Query: {
+    categories,
+    category,
+  },
+  Mutation: {
+    addCategory,
+    deleteCategory,
+  },
 };

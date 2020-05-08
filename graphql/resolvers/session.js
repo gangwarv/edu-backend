@@ -1,17 +1,14 @@
 const Session = require("../../models/shared/session");
 
 const sessions = async ({ top }) => {
-  return Session.find()
-    .sort({ year: -1 })
-    .limit(top)
-    .lean()
+  return Session.find().sort({ year: -1 }).limit(top).lean();
 };
 
-const session = ({ id }) => {
+const session = (_,{ id }) => {
   return Session.findById(id);
 };
 
-const addSession = async ({ id, name, year }) => {
+const addSession = async (_, { id, name, year }) => {
   //only insert
   if (year > new Date().getFullYear())
     throw new Error(
@@ -24,7 +21,8 @@ const addSession = async ({ id, name, year }) => {
 };
 
 module.exports = {
-  sessions,
-  addSession,
-  session,
+  Query: { sessions,session },
+  Mutation: {
+    addSession,
+  },
 };

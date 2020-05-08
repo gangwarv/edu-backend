@@ -6,12 +6,12 @@ const Course = require("../../../models/shared/course");
 // const User = require("../../../models/app-management/user");
 
 // Fee Category
-const feeCategories = (args, req) => {
+const feeCategories = (_, args, req) => {
   req.passed("fee-structure-crud");
   return FeeCategory.find();
 };
 
-const addFeeCategory = ({ id, name }, req) => {
+const addFeeCategory = (_, { id, name }, req) => {
   req.passed("fee-structure-crud");
   return FeeCategory.findByIdAndUpdate(
     id,
@@ -21,7 +21,7 @@ const addFeeCategory = ({ id, name }, req) => {
 };
 // End Fee Category
 // Fee Structure --start
-const feeStructures = async (args, req) => {
+const feeStructures = async (_, args, req) => {
   req.passed("fee-structure-crud");
   const courses = await Course.find({ isActive: true }).lean();
   // const res = await Course.aggregate([
@@ -38,14 +38,14 @@ const feeStructures = async (args, req) => {
   return courses;
 };
 
-const feeStructure = async (filterArgs, req) => {
+const feeStructure = async (_, filterArgs, req) => {
   req.passed("fee-structure-crud");
 
   return FeeStructure.find(filterArgs).lean();
 };
 // session, fsCategory, course, feeType,
 // fsArray: [id?, session, fsCategory, course, feeType, oddEven, year, feeItem, feeAmount, isDeleted]
-const addFeeStructure = async ({ fs }, req) => {
+const addFeeStructure = async (_, { fs }, req) => {
   req.passed("fee-structure-crud");
 
   const del = fs.filter((x) => x.isDeleted).map((e) => e.id);
@@ -59,7 +59,8 @@ const addFeeStructure = async ({ fs }, req) => {
         {
           new: true,
           upsert: true,
-          setDefaultsOnInsert: true,run
+          setDefaultsOnInsert: true,
+          run,
         }
       );
     })
@@ -70,10 +71,13 @@ const addFeeStructure = async ({ fs }, req) => {
 };
 
 module.exports = {
-  feeCategories,
-  addFeeCategory,
-
-  feeStructures,
-  feeStructure,
-  addFeeStructure,
+  Query: {
+    feeCategories,
+    feeStructures,
+    feeStructure,
+  },
+  Mutation: {
+    addFeeCategory,
+    addFeeStructure,
+  }
 };

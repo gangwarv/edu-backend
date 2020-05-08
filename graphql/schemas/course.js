@@ -32,6 +32,6 @@ module.exports = [
     `
     addCourse(course: CourseInput!): Course!
     deleteCourse(id: String!): Course!
-    modifyCourses(ids: [String!]!, command: String!, data: String): [Course!]!
+    updateCourses(ids: [String!]!, command: String!, data: String): [Course!]!
     `
 ]
