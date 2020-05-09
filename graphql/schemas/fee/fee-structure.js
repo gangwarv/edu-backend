@@ -18,7 +18,7 @@ module.exports = [
         course: String
         courseName: String
         year: String
-        oddEven: String
+        label: String
         feeItem: String!
         feeItemName: String!
         feeAmount: Float!
@@ -32,7 +32,7 @@ module.exports = [
         fsCategory: String!
         course: String
         year: String
-        oddEven: String
+        label: String
         feeItem: String!
         feeAmount: Float!
         fromDate: ISODate

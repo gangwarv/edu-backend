@@ -1,4 +1,5 @@
-const { buildSchema } = require("graphql");
+const { mergeSchemas } = require("../merge-helpers");
+
 const AuthSchema = require("./auth");
 const CategorySchema = require("./category");
 const AcDeptSchema = require("./department");
@@ -8,21 +9,16 @@ const SessionSchema = require("./session");
 
 const FeeSchema = require("./fee");
 
-const schemas = [
+const schemas = mergeSchemas([
   AuthSchema,
   CategorySchema,
   AcDeptSchema,
   CourseSchema,
   SessionSchema,
   FeeSchema,
-].reduce(
-  (acc, schema) => {
-    return acc.map((ac, i) => (ac += "\n" + schema[i]));
-  },
-  ["", "", ""]
-);
+]);
 
-module.exports = (`
+module.exports = `
 scalar ISODate
 ${schemas[0]}
 
@@ -33,4 +29,4 @@ type Query {
 type Mutation {
     ${schemas[2]}
 }
-`);
+`;

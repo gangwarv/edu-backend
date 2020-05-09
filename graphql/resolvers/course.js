@@ -40,7 +40,7 @@ const course = (_, { id }, req) => {
   return Course.findById(id);
 };
 
-const deleteCourse = async ({ id }, req) => {
+const deleteCourse = async (_,{ id }, req) => {
   req.passed("course-delete");
   const count = await Course.countDocuments({ _id: id });
 
