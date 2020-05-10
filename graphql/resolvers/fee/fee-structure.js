@@ -48,26 +48,27 @@ const feeStructure = async (_, filterArgs, req) => {
 const addFeeStructure = async (_, { fs }, req) => {
   req.passed("fee-structure-crud");
 
-  const del = fs.filter((x) => x.isDeleted).map((e) => e.id);
-  const ins = fs.filter((x) => !x.isDeleted);
+  // const del = fs.filter((x) => x.isDeleted).map((e) => e.id);
+  // const ins = fs.filter((x) => !x.isDeleted);
 
-  const result = await Promise.all(
-    ins.map((fsi) => {
-      return FeeStructure.findByIdAndUpdate(
-        fsi.id || new mongoose.Types.ObjectId(),
-        fsi,
-        {
-          new: true,
-          upsert: true,
-          setDefaultsOnInsert: true,
-          run,
-        }
-      );
-    })
-  );
-  if (del) await FeeStructure.deleteMany({ _id: { $in: del } });
-
-  return result;
+  // const result = await Promise.all(
+  //   ins.map((fsi) => {
+  //     return FeeStructure.findByIdAndUpdate(
+  //       fsi.id || new mongoose.Types.ObjectId(),
+  //       fsi,
+  //       {
+  //         new: true,
+  //         upsert: true,
+  //         setDefaultsOnInsert: true,
+  //         run,
+  //       }
+  //     );
+  //   })
+  // );
+  // if (del) await FeeStructure.deleteMany({ _id: { $in: del } });
+console.log(fs.length)
+console.log(JSON.parse(fs))
+  return fs;
 };
 
 module.exports = {

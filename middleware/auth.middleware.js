@@ -40,7 +40,6 @@ function passed(roleNames) {
   }
 }
 function hasAny(roleNames = "") {
-  console.log(this.roles)
   return (
     this.isAuth &&
     (this.roles.includes("admin") || roleNames.split(",").some((x) => this.roles.includes(x)) )

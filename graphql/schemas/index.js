@@ -19,7 +19,6 @@ const schemas = mergeSchemas([
 ]);
 
 module.exports = `
-scalar ISODate
 ${schemas[0]}
 
 type Query {

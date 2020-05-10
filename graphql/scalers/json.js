@@ -22,8 +22,8 @@ function parseLiteral(ast) {
 }
 
 module.export = new GraphQLScalarType({
-  name: "ISODate",
-  description: "JavaScript Date object as an ISO timestamp",
+  name: "Json",
+  description: "Json representation of an object.",
   serialize,
   parseValue,
   parseLiteral,
