@@ -10,11 +10,12 @@ const returnOnError = (operation, alternative) => {
 };
 
 function serialize(value) {
-  return value instanceof Date ? value.toISOString() : null;
+  // No need, not going to send json from resolver
+  return value != null ? JSON.stringify(value) : null;
 }
 
 function parseValue(value) {
-  return returnOnError(() => (value == null ? null : new Date(value)), null);
+  return returnOnError(() => (value == null ? null : JSON.parse(value)), null);
 }
 
 function parseLiteral(ast) {

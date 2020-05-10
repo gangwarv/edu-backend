@@ -5,8 +5,8 @@ var customSchema = require("./schemas");
 var customResolvers = require("./resolvers");
 
 customSchema = gql`
-scalar ISODate
-scalar Json
+  scalar ISODate
+  scalar Json
   ${customSchema}
 `;
 
@@ -15,7 +15,10 @@ const server = new ApolloServer({
   resolvers: {
     ...customResolvers,
     ISODate,
-    Json
+    Json,
+  },
+  context({ req }) {
+    return req;
   },
 });
 
