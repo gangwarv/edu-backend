@@ -34,7 +34,7 @@ const categories = (_, args) => {
   }
   return Category.find(filter);
 };
-const category = ({ id }) => {
+const category = (_,{ id }) => {
   return Category.findById(id);
 };
 

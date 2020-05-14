@@ -13,9 +13,9 @@ customSchema = gql`
 const server = new ApolloServer({
   typeDefs: customSchema,
   resolvers: {
-    ...customResolvers,
     ISODate,
     Json,
+    ...customResolvers,
   },
   context({ req }) {
     return req;

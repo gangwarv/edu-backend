@@ -14,15 +14,13 @@ const schema = new mongoose.Schema(
       // null in case of non-academic fees
       type: String,
       required: function () {
-        return this.feeType === "academic" || this.feeType === "onetime";
+        return this.feeType === "academic" || this.feeType === "other";
       },
       ref: "Course",
     },
-    oddEven: {
+    label: {
       // semester wise indication
       type: String,
-      required: true,
-      default: "",
     },
     year: {
       // null in case of non-academic fees

@@ -10,7 +10,7 @@ const feeItem = (_, { id }) => {
   return FeeItem.findById(id);
 };
 
-const addFeeItem = async ({ id, name, group, isActive }, req) => {
+const addFeeItem = async (_,{ id, name, group, isActive }, req) => {
   req.passed("fee-structure-crud");
 
   const feeGroup = await FeeGroup.findById(group);
