@@ -7,7 +7,7 @@ const Course = require("../../../models/shared/course");
 
 // Fee Category
 const feeCategories = (_, args, req) => {
-  req.passed("fee-structure-crud");
+  req.passed("fee-structure-view");
   return FeeCategory.find();
 };
 
@@ -22,25 +22,45 @@ const addFeeCategory = (_, { id, name }, req) => {
 // End Fee Category
 // Fee Structure --start
 const feeStructures = async (_, { fsSession, fsCategory }, req) => {
-  req.passed("fee-structure-crud");
+  req.passed("fee-structure-view");
+  // await FeeStructure.updateMany(
+  //   { feeType: "other" },
+  //   { $set: { feeType: "type-2" } }
+  // );
   const courses = await Course.find({ isActive: true }, "name").lean();
 
   const aggr = await FeeStructure.aggregate([
-    { $match: { fsSession, fsCategory } },
+    { $match: { fsSession, fsCategory, feeType: 'type-1', year: { $ne: "0" } } },
     {
       $group: {
-        _id: { course: "$course", feeType: "$feeType" },
-        count: { $sum: 1 },
+        _id: { course: "$course" },
         sum: { $sum: "$feeAmount" },
       },
     },
     {
-      $project: {
-        course: "$_id.course",
-        feeType: "$_id.feeType",
-        count: "$count",
-        sum: "$sum",
+      $lookup: {
+        from: "courses",
+        localField: "_id.course",
+        foreignField: "_id",
+        as: "courses",
       },
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [{ $arrayElemAt: ["$courses", 0] }, "$$ROOT"],
+        },
+      },
+    },
+    {
+      $project: {
+        course: "$name", //{$arrayElemAt: [ "$courses", 0 ] },
+        id: "$_id.course",
+        totalFee: "$sum"
+      },
+    },
+    {
+      $sort: { course: 1},
     },
   ]);
   // const aggrFlat=aggr.map(x=>({_i}))
@@ -49,26 +69,35 @@ const feeStructures = async (_, { fsSession, fsCategory }, req) => {
     courseName: x.name,
     fsSession,
     fsCategory,
-    fsSummary: aggr.filter((s) => s.course === x.id),
-    academic: aggr.find((a) => a.course == x.id && a.feeType == "academic") || {
-      count: 0,
-      sum: 0,
-    },
-    nonAcademic: aggr.find(
-      (a) => a.course == x.id && a.feeType == "non-academic"
-    ) || { count: 0, sum: 0 },
-    other: aggr.find((a) => a.course == x.id && a.feeType == "other") || {
-      count: 0,
-      sum: 0,
-    },
   }));
 };
 
-const feeStructure = async (_, filterArgs, req) => {
-  req.passed("fee-structure-crud");
-  // if (filterArgs.feeType === "academic")
-  //   filterArgs.feeType = { $in: ["academic", "other"] };
-  return FeeStructure.find(filterArgs).lean();
+const feeStructure = async (_, args, req) => {
+  req.passed("fee-structure-view");
+  if (args.feeType === "type-2") {
+    args.course = null;
+    args.year = null;
+  }
+  Object.keys(args).forEach((k) => {
+    if (!args[k]) delete args[k];
+    // if (!args[k]) delete args[k];
+  });
+  console.log(args);
+  let fs = await FeeStructure.find(args)
+    .populate("course", "name")
+    .populate("feeItem", "name")
+    .sort({ course: 1 })
+    .lean();
+
+  fs = fs.map((f) => ({
+    ...f,
+    course: f.course && f.course._id,
+    courseName: f.course && f.course.name,
+    feeItem: f.feeItem._id,
+    feeItemName: f.feeItem.name,
+  }));
+  //console.log(fs);
+  return fs;
 };
 
 // fsArray: [id?, session, fsCategory, course, feeType, label, year, feeItem, feeAmount, isDeleted]
@@ -76,7 +105,7 @@ const addFeeStructure = async (_, { fs }, req) => {
   req.passed("fee-structure-crud");
   const docs = fs.map((d) => new FeeStructure(d));
   const errors = docs.map((x) => x.validateSync());
-  
+
   if (errors.length && errors[0]) throw errors[0];
 
   const del = fs.filter((x) => x.isDeleted).map((e) => e.id);

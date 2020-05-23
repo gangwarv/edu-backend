@@ -2,11 +2,13 @@ const FeeItem = require("../../../models/fee/fee-item");
 const FeeGroup = require("../../../models/fee/fee-group");
 const { generateNext } = require("../../../helpers/sequence");
 
-const feeItems = async (_, args) => {
+const feeItems = async (_, args, req) => {
+  req.passed("fee-structure-view");
   return FeeItem.find();
 };
 
-const feeItem = (_, { id }) => {
+const feeItem = (_, { id }, req) => {
+  req.passed("fee-structure-view");
   return FeeItem.findById(id);
 };
 

@@ -1,88 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../models/app-management/user");
 const Role = require("../../models/app-management/role");
-const AppModule = require("../../models/app-management/appmodule");
+// const AppModule = require("../../models/app-management/appmodule");
+const menusData = require('./menus.json')
 const { TOKEN_EXPIRY } = require("../../keys");
-const maxLoginAttempts = 50;
-const menusData = [
-  {
-    text: "Departments",
-    path: "/acdepts",
-    module: "EDP",
-    privilege: "course-view",
-    position: "left",
-  },
-  {
-    text: "Courses",
-    path: "/courses",
-    module: "EDP",
-    privilege: "course-view",
-    position: "left",
-  },
-  {
-    text: "Categories",
-    path: "/categories",
-    privilege: "category-view",
-    module: "EDP",
-    position: "left",
-  },
-  {
-    text: "Session Manager",
-    path: "/sessions",
-    privilege: "course-view",
-    module: "EDP",
-    position: "left",
-  },
-  {
-    text: "Users",
-    path: "/users",
-    module: "User Management",
-    privilege: "user-view",
-    position: "left",
-  },
-  {
-    text: "Role",
-    path: "/roles",
-    module: "User Management",
-    privilege: "role-view",
-    position: "left",
-  },
-  {
-    text: "Profile",
-    path: "/profile",
-    module: "My Account",
-    privilege: null,
-    position: "top",
-  },
-  {
-    text: "Change Password",
-    path: "/changepassword",
-    module: "My Account",
-    privilege: null,
-    position: "top",
-  },
-  {
-    text: "Fee Groups",
-    path: "/feegroups",
-    privilege: "course-view",
-    module: "Fee Management",
-    position: "left",
-  },
-  {
-    text: "Fee Items",
-    path: "/feeitems",
-    privilege: "course-view",
-    module: "Fee Management",
-    position: "left",
-  },
-  {
-    text: "Fee Structure",
-    path: "/feestructures",
-    privilege: "course-view",
-    module: "Fee Management",
-    position: "left",
-  },
-];
+// const maxLoginAttempts = 50;
 
 function transformUser(userDoc) {
   return {
