@@ -21,55 +21,77 @@ const addFeeCategory = (_, { id, name }, req) => {
 };
 // End Fee Category
 // Fee Structure --start
-const feeStructures = async (_, { fsSession, fsCategory }, req) => {
+const courseFeeStructure = async (
+  _,
+  { fsSession, fsCategory, feeType },
+  req
+) => {
   req.passed("fee-structure-view");
-  // await FeeStructure.updateMany(
-  //   { feeType: "other" },
-  //   { $set: { feeType: "type-2" } }
-  // );
-  const courses = await Course.find({ isActive: true }, "name").lean();
-
-  const aggr = await FeeStructure.aggregate([
-    { $match: { fsSession, fsCategory, feeType: 'type-1', year: { $ne: "0" } } },
-    {
-      $group: {
-        _id: { course: "$course" },
-        sum: { $sum: "$feeAmount" },
-      },
-    },
+  if (!feeType) feeType = "type-1";
+  const groups = await Course.aggregate([
+    { $match: { isActive: true } },
     {
       $lookup: {
-        from: "courses",
-        localField: "_id.course",
-        foreignField: "_id",
-        as: "courses",
-      },
-    },
-    {
-      $replaceRoot: {
-        newRoot: {
-          $mergeObjects: [{ $arrayElemAt: ["$courses", 0] }, "$$ROOT"],
-        },
+        from: "feestructures",
+        let: { courseId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$course", "$$courseId"] },
+                  { $eq: ["$fsSession", fsSession] },
+                  { $eq: ["$fsCategory", fsCategory] },
+                  { $eq: ["$feeType", feeType] },
+                ],
+              },
+            },
+          },
+          {
+            $lookup: {
+              from: "feeitems",
+              let: { itemId: "$feeItem" },
+              pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$itemId"] } } }],
+              as: "feeItem",
+            },
+          },
+          { $unwind: "$feeItem" },
+          {
+            $project: {
+              id: "$_id",
+              feeItem: "$feeItem._id",
+              year: "$year",
+              feeItemName: "$feeItem.name",
+              feeAmount: "$feeAmount",
+              label: "$label",
+              dueDate: "$dueDate",
+            },
+          },
+        ],
+        as: "feeDetails",
       },
     },
     {
       $project: {
-        course: "$name", //{$arrayElemAt: [ "$courses", 0 ] },
-        id: "$_id.course",
-        totalFee: "$sum"
+        _id: false,
+        id: "$_id",
+        code: "$code",
+        courseName: "$name",
+        feeDetails: "$feeDetails",
       },
     },
     {
-      $sort: { course: 1},
+      $addFields: {
+        // fsExists: {
+        //   $cond: { if: { $eq: [{ $size: "$feeDetails" }, 0] }, then: false, else: true },
+        // },
+        fsSession,
+        fsCategory,
+      },
     },
   ]);
-  // const aggrFlat=aggr.map(x=>({_i}))
-  return courses.map((x) => ({
-    course: x.id,
-    courseName: x.name,
-    fsSession,
-    fsCategory,
-  }));
+  console.log(groups[0]);
+  return groups;
 };
 
 const feeStructure = async (_, args, req) => {
@@ -137,7 +159,7 @@ const addFeeStructure = async (_, { fs }, req) => {
 module.exports = {
   Query: {
     feeCategories,
-    feeStructures,
+    courseFeeStructure,
     feeStructure,
   },
   Mutation: {

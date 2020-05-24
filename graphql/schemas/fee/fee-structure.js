@@ -5,21 +5,13 @@ module.exports = [
         name: String!
     }
 
-    type Aggregation {
-      feeType: String
-      count: Int
-      sum: Int
-    }
-
     type CourseFeeStructure {
         fsSession: String!
         fsCategory: String!
-        course: String
-        courseName: String
-        fsSummary: [Aggregation]
-        academic: Aggregation
-        nonAcademic: Aggregation
-        other: Aggregation
+        id: String!
+        code: String!
+        courseName: String!
+        feeDetails: [FeeStructure!]! 
     }
     type FeeStructure {
         id: ID
@@ -57,7 +49,7 @@ module.exports = [
   `
     feeCategories: [FeeCategory!]!
     
-    feeStructures(fsSession: String!, fsCategory: String!): [CourseFeeStructure!]!
+    courseFeeStructure(fsSession: String!, fsCategory: String!): [CourseFeeStructure!]!
     feeStructure(fsSession: String!, fsCategory: String!, feeType: String!, course: String, year: String, feeItem: String): [FeeStructure!]!
 
     `,

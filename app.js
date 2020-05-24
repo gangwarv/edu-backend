@@ -22,7 +22,7 @@ app.use('/counter', function(req, res, next) {
   activeUsers.push(activeUsers.length + 1)
   res.send(activeUsers)
  });
- app.get('/test', TestRoute);
+ app.use('/test', TestRoute);
 
 app.use(['/', '/*'], function(req, res, next) {
   res.sendFile(path.join(__dirname, './public', 'index.html'));
