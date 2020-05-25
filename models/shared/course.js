@@ -1,44 +1,46 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const schema = new mongoose.Schema({
+const schema = new mongoose.Schema(
+  {
+    _id: String,
     code: {
-        type: String,
-        required: true,
-        default:'NO_CODE'
+      type: String,
+      required: true
     },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     departmentName: String,
     department: {
-        type: mongoose.Types.ObjectId,
-        ref: "AcademicDepartment"
+      type: String,
+      ref: "AcademicDepartment",
+      required: true,
     },
     type: {
-        type: String,
-        enum:['UG','PG'],
-        required: true,
-        default: "UG"
+      type: String,
+      enum: ["UG", "PG"],
+      required: true,
     },
     isActive: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      required: true,
     },
-    activeForAdmission: {
-        type: Boolean,
-        default: false
+    admissionOpen: {
+      type: Boolean,
+      default: false,
     },
-    isLateral: {
-        type: Boolean,
-        default: false
+    admissionLastDate: {
+      type: Date,
     },
     duration: {
-        type: String,
-        required: true
-    }
-}, { timestamps: true });
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
-// schema.index({ name: 1 }, { unique: true }); not required
+schema.index({ name: 1 }, { unique: true });
 
-module.exports = mongoose.model('Course', schema);
+module.exports = mongoose.model("Course", schema);

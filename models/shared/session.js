@@ -7,6 +7,10 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    year: {
+      type: Number,
+      required: true,
+    },
     tasks: [
       {
         task: { type: String, required: true },

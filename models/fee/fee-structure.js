@@ -4,53 +4,62 @@ const schema = new mongoose.Schema(
   {
     fsSession: {
       type: String,
-      required: true
+      required: true,
     },
     fsCategory: {
       type: String,
-      required: true
+      required: true,
     },
     course: {
-      // null in case of non-academic fees
-      type: mongoose.Types.ObjectId,
-      required: function() {
-        return this.feeType === 'academic' || this.feeType === 'registration';
+      // null in case of type-1 fees
+      type: String,
+      required: function () {
+        return this.feeType === "type-1";
       },
-      ref: "Course"
+      ref: "Course",
+    },
+    label: {
+      // semester wise indication
+      type: String,
     },
     year: {
-      // null in case of non-academic fees
+      // null in case of type-1 fees
       type: String,
-      required: function() {
-        return this.feeType === 'academic';
+      required: function () {
+        return this.feeType === "type-1";
       },
     },
     feeItem: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       ref: "FeeItem",
-      required: true
+      required: true,
     },
     feeAmount: {
       type: Number,
       min: 0,
-      required: true
+      required: true,
+    },
+    fromDate: {
+      type: Date,
+      required: true,
     },
     dueDate: {
       type: Date,
-      required: true
+      required: true,
     },
     feeType: {
-      // academic: course specific, non-academic: common for all courses & year, 
-      // registration: course registration fee before admission
+      // type-1: course specific, registration/admission fee before admission
+      // type-2: common for all courses, eg; hostel-mess, transport etc.
       type: String,
-      enum:['academic','non-academic','registration'],
-      required: true
+      enum: ["type-1", "type-2"],
+      required: true,
     },
     isOptional: {
       // whether fee is optional or mandatory to all associated students
       type: Boolean,
-      required: true
-    }
+      required: true,
+      default: false
+    },
   },
   { timestamps: true }
 );

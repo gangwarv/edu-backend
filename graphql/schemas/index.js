@@ -1,34 +1,22 @@
-const { buildSchema } = require('graphql')
-const AuthSchema = require('./auth')
-const CategorySchema = require('./category')
-const AcDeptSchema = require('./department')
-const CourseSchema = require('./course')
+const { mergeSchemas } = require("../merge-helpers");
 
-const FeeSchema = require('./fee-schema')
+const SharedSchema = require("./shared");
 
-module.exports = buildSchema(`
-${AuthSchema[0]}
-${CategorySchema[0]}
-${AcDeptSchema[0]}
-${CourseSchema[0]}
-${FeeSchema[0]}
- 
+const FeeSchema = require("./fee");
+
+const schemas = mergeSchemas([
+  SharedSchema,
+  FeeSchema,
+]);
+
+module.exports = `
+${schemas[0]}
 
 type Query {
-    ${AuthSchema[1]}
-    ${CategorySchema[1]}
-    ${AcDeptSchema[1]}
-    ${CourseSchema[1]}
-    ${FeeSchema[1]}
-
-  
+    ${schemas[1]}
 }
 
 type Mutation {
-    ${AuthSchema[2]}
-    ${CategorySchema[2]}
-    ${AcDeptSchema[2]}
-    ${CourseSchema[2]}
-    ${FeeSchema[2]}
+    ${schemas[2]}
 }
-`);
+`;

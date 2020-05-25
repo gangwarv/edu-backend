@@ -8,9 +8,10 @@ module.exports = function (req, res, next) {
 
   try {
     if (!token) {
-      // temp
+      // temporary for graphiql interface only
       req.isAuth = true;
-      req.roles = "admin";
+      req.userName = "no_user";
+      req.roles = ["admin"];
     } else {
       const { userId, privileges, userName, ...rest } = jwt.verify(
         token,
@@ -18,38 +19,39 @@ module.exports = function (req, res, next) {
       );
       req.userId = userId;
       req.userName = userName;
-      req.roles = privileges;
+      // without role user not allowed to enter
+      req.roles = privileges.split(",");
+      req.isAuth = true;
     }
-    req.isAuth = true;
   } catch (e) {
     req.isAuth = false;
-    req.roles = "";
+    req.roles = [];
   }
   req.passed = passed.bind(req);
-  req.hasRole = hasRole.bind(req);
+  req.hasAny = hasAny.bind(req);
 
-  console.warn("request", req.isAuth, req.userId, req.userName, req.roles);
+  console.warn(
+    "request",
+    req.isAuth,
+    req.userName,
+    "isAdmin:",
+    req.roles.includes("admin")
+  );
   next();
 };
 
-function passed(roleName) {
-  if (!this.hasRole(roleName)) {
-    throw new Error("access-denied");
+function passed(roleNames) {
+  if (!this.isAuth){
+    throw new Error('Session Expired! Log in again.')
   }
+    if (!this.hasAny(roleNames)) {
+      throw new Error("access-denied, required privilege " + roleNames);
+    }
 }
-function hasRole(roleName = "") {
+function hasAny(roleNames = "") {
   return (
     this.isAuth &&
-    (this.roles.includes("admin") || this.roles.includes(roleName))
+    (this.roles.includes("admin") ||
+      roleNames.split(",").some((x) => this.roles.includes(x)))
   );
 }
-// function hasAny(roleName = '') {
-//     return this.isAuth
-//         &&
-//         (
-//             this.roles.includes('admin')
-//             ||
-//             roleName.split(',').some(role => this.roles.includes(role))
-
-//         );
-// }
