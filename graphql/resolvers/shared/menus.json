@@ -70,8 +70,15 @@
     "position": "left"
   },
   {
-    "text": "Courses Fee Structure",
+    "text": "Fee Struct. Courses",
     "path": "/fs-courses",
+    "privilege": "fee-structure-view",
+    "module": "Fee Management",
+    "position": "left"
+  },
+  {
+    "text": "Fee Struct. Other",
+    "path": "/fs-other",
     "privilege": "fee-structure-view",
     "module": "Fee Management",
     "position": "left"

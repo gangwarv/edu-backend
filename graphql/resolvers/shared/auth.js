@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const User = require("../../models/app-management/user");
-const Role = require("../../models/app-management/role");
+const User = require("../../../models/app-management/user");
+const Role = require("../../../models/app-management/role");
 // const AppModule = require("../../models/app-management/appmodule");
 const menusData = require('./menus.json')
-const { TOKEN_EXPIRY } = require("../../keys");
+const { TOKEN_EXPIRY } = require("../../../keys");
 // const maxLoginAttempts = 50;
 
 function transformUser(userDoc) {

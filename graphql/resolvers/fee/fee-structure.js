@@ -60,6 +60,7 @@ const courseFeeStructure = async (
             $project: {
               id: "$_id",
               feeItem: "$feeItem._id",
+              groupName: "$feeItem.groupName",
               year: "$year",
               feeItemName: "$feeItem.name",
               feeAmount: "$feeAmount",
@@ -93,7 +94,49 @@ const courseFeeStructure = async (
   console.log(groups[0]);
   return groups;
 };
-
+const otherFeeStructure = async (_, { fsSession, fsCategory }, req) => {
+  req.passed("fee-structure-view");
+  const feeType = "type-2";
+  return FeeStructure.aggregate([
+    {
+      $match: {
+        $expr: {
+          $and: [
+            { $eq: ["$fsSession", fsSession] },
+            { $eq: ["$fsCategory", fsCategory] },
+            { $eq: ["$feeType", feeType] },
+          ],
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "feeitems",
+        let: { itemId: "$feeItem" },
+        pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$itemId"] } } }],
+        as: "feeItem",
+      },
+    },
+    { $unwind: "$feeItem" },
+    {
+      $project: {
+        id: "$_id",
+        feeItem: "$feeItem._id",
+        feeItemName: "$feeItem.name",
+        groupName: "$feeItem.groupName",
+        feeAmount: "$feeAmount",
+        label: "$label",
+        dueDate: "$dueDate",
+      },
+    },
+    {
+      $addFields: {
+        fsSession,
+        fsCategory,
+      },
+    },
+  ]);
+};
 const feeStructure = async (_, args, req) => {
   req.passed("fee-structure-view");
   if (args.feeType === "type-2") {
@@ -102,13 +145,12 @@ const feeStructure = async (_, args, req) => {
   }
   Object.keys(args).forEach((k) => {
     if (!args[k]) delete args[k];
-    // if (!args[k]) delete args[k];
   });
   console.log(args);
   let fs = await FeeStructure.find(args)
     .populate("course", "name")
     .populate("feeItem", "name")
-    .sort({ course: 1 })
+    .sort({ course: 1, year: 1 })
     .lean();
 
   fs = fs.map((f) => ({
@@ -118,11 +160,10 @@ const feeStructure = async (_, args, req) => {
     feeItem: f.feeItem._id,
     feeItemName: f.feeItem.name,
   }));
-  //console.log(fs);
   return fs;
 };
 
-// fsArray: [id?, session, fsCategory, course, feeType, label, year, feeItem, feeAmount, isDeleted]
+
 const addFeeStructure = async (_, { fs }, req) => {
   req.passed("fee-structure-crud");
   const docs = fs.map((d) => new FeeStructure(d));
@@ -160,6 +201,7 @@ module.exports = {
   Query: {
     feeCategories,
     courseFeeStructure,
+    otherFeeStructure,
     feeStructure,
   },
   Mutation: {

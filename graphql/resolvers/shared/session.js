@@ -1,4 +1,4 @@
-const Session = require("../../models/shared/session");
+const Session = require("../../../models/shared/session");
 
 const sessions = async (_,{ top }) => {
   return Session.find().sort({ year: -1 }).limit(top).lean();

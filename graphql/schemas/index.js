@@ -1,20 +1,11 @@
 const { mergeSchemas } = require("../merge-helpers");
 
-const AuthSchema = require("./auth");
-const CategorySchema = require("./category");
-const AcDeptSchema = require("./department");
-const CourseSchema = require("./course");
-
-const SessionSchema = require("./session");
+const SharedSchema = require("./shared");
 
 const FeeSchema = require("./fee");
 
 const schemas = mergeSchemas([
-  AuthSchema,
-  CategorySchema,
-  AcDeptSchema,
-  CourseSchema,
-  SessionSchema,
+  SharedSchema,
   FeeSchema,
 ]);
 

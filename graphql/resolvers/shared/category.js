@@ -1,5 +1,5 @@
-const Category = require("../../models/shared/category");
-const { generateNext } = require("../../helpers/sequence");
+const Category = require("../../../models/shared/category");
+const { generateNext } = require("../../../helpers/sequence");
 
 const addCategory = async (_, { id, name, isActive }, req) => {
   req.passed("category-create");

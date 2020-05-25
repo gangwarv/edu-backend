@@ -1,6 +1,6 @@
-const Department = require("../../models/shared/department");
-const Course = require("../../models/shared/course");
-const { generateNext } = require("../../helpers/sequence");
+const Department = require("../../../models/shared/department");
+const Course = require("../../../models/shared/course");
+const { generateNext } = require("../../../helpers/sequence");
 
 const addDepartment = async (_, { dept: { id, name, isActive } }, req) => {
   req.passed("course-create");

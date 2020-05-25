@@ -22,6 +22,7 @@ module.exports = [
         year: String
         label: String
         feeItem: String!
+        groupName: String!
         feeAmount: Float!
         fromDate: ISODate
         dueDate: ISODate
@@ -50,6 +51,8 @@ module.exports = [
     feeCategories: [FeeCategory!]!
     
     courseFeeStructure(fsSession: String!, fsCategory: String!): [CourseFeeStructure!]!
+    otherFeeStructure(fsSession: String!, fsCategory: String!): [FeeStructure!]!
+
     feeStructure(fsSession: String!, fsCategory: String!, feeType: String!, course: String, year: String, feeItem: String): [FeeStructure!]!
 
     `,
