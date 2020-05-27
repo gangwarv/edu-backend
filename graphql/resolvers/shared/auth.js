@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../../models/app-management/user");
 const Role = require("../../../models/app-management/role");
+const Log = require("../../../models/app-management/activity-log");
 // const AppModule = require("../../models/app-management/appmodule");
-const menusData = require('./menus.json')
+const menusData = require("./menus.json");
 const { TOKEN_EXPIRY } = require("../../../keys");
 // const maxLoginAttempts = 50;
 
@@ -27,12 +28,25 @@ const login = async (_, { userName, password }, req) => {
         isActive: true,
       },
     ],
-  }).populate("role");
+  }).populate("role", "name privileges").lean();
 
-  if (!user) throw new Error("User does not exists!");
-  if (user.blocked) throw new Error("Your account has been blocked!");
-  if (!req.isAuth && password !== user.password) {
-    throw new Error("Invalid credentials!");
+  const log = {
+    type: "login",
+  };
+  try {
+    if (!user) throw new Error("User does not exist!");
+    if (user.blocked) throw new Error("Your account has been blocked!");
+    if (!req.isAuth && password !== user.password)
+      throw new Error("Invalid credentials!");
+    log.message = "Login Success.";
+    log.userId = user.id;
+    log.userName = user.userName;
+  } catch (err) {
+    log.message = err.message;
+    throw err;
+  } finally {
+    log.data = JSON.stringify({ userName, password });
+    await Log.create(log)
   }
   const data = {
     userId: user.id,
