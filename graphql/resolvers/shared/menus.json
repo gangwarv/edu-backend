@@ -50,7 +50,7 @@
   },
   {
     "text": "Change Password",
-    "path": "/changepassword",
+    "path": "/manage-password",
     "module": "My Account",
     "privilege": null,
     "position": "top"
